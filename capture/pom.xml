@@ -1,0 +1,56 @@
+<!--
+Copyright 2011 Jess Morgan
+
+This file is part of car-data-logger.
+
+car-data-logger is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+car-data-logger is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with car-data-logger.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>jess.morgan.car-data-logger</groupId>
+	<artifactId>capture</artifactId>
+	<version>0.1.0-SNAPSHOT</version>
+	<name>Data Capture</name>
+	<description>Reads data from multiple serial inputs and combines into a single data file</description>
+	<inceptionYear>2011</inceptionYear>
+	<properties>
+		<rxtx.version>2.1-7</rxtx.version>
+		<rxtx.suffix>-r2</rxtx.suffix>
+	</properties>
+	<licenses>
+		<license>
+			<name>GNU General Public License (GPL)</name>
+			<comments>Version 3</comments>
+			<url>http://www.gnu.org/licenses/gpl-3.0.html</url>
+		</license>
+	</licenses>
+	<developers>
+		<developer>
+			<name>Jess Morgan</name>
+			<email>Jessica.Morgan.skis@gmail.com</email>
+			<timezone>-5</timezone>
+		</developer>
+	</developers>
+	<dependencies>
+		<dependency>
+			<groupId>org.qbang.rxtx</groupId>
+			<artifactId>rxtx</artifactId>
+			<version>${rxtx.version}</version>
+			<classifier>${rxtx.suffix}</classifier>
+			<scope>system</scope>
+			<systemPath>${basedir}/rxtx-${rxtx.version}-bins${rxtx.suffix}/RXTXcomm.jar</systemPath>
+		</dependency>
+	</dependencies>
+</project>

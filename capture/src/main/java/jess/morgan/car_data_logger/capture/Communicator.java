@@ -28,19 +28,27 @@ import gnu.io.UnsupportedCommOperationException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Communicator {
-	public Communicator(String commPort, int speed, Logger logger) throws NoSuchPortException, PortInUseException, UnsupportedCommOperationException, IOException {
-		SerialPort serial = connect(commPort, speed);
+	private final AtomicBoolean running = new AtomicBoolean(true);
+	private Thread thread;
+
+	public Communicator(Connection connection, Logger logger) throws NoSuchPortException, PortInUseException, UnsupportedCommOperationException, IOException {
+		SerialPort serial = connect(connection.getPortName(), connection.getSpeed());
 
 		try {
-			new CommunicatorThread(logger, serial).start();
+			thread = new CommunicatorThread(logger, serial);
+			thread.start();
 		} catch(IOException ioe) {
 			serial.close();
+			stop();
 		}
 	}
 
 	private SerialPort connect(String portName, int speed) throws NoSuchPortException, PortInUseException, UnsupportedCommOperationException, IOException {
+		System.out.println("Connecting to " + portName + " at " + speed + " baud");
+
 		CommPortIdentifier portIdentifier = CommPortIdentifier.getPortIdentifier(portName);
 		if(portIdentifier.isCurrentlyOwned()) {
 			throw new PortInUseException();
@@ -59,6 +67,13 @@ public class Communicator {
 		}
 	}
 
+	public void stop() {
+		this.running.set(false);
+		if(thread != null) {
+			thread.interrupt();
+		}
+	}
+
 	private class CommunicatorThread extends Thread {
 		private final Logger logger;
 		private final BufferedReader br;
@@ -74,7 +89,7 @@ public class Communicator {
 
 		@Override
 		public void run() {
-			while(logger.isRunning()) {
+			while(running.get()) {
 				String line;
 				try {
 					line = br.readLine();
@@ -92,6 +107,8 @@ public class Communicator {
 				// Ignore
 			}
 			serial.close();
+			running.set(false);
+			System.out.println("Comm stopped for " + serial.getName());
 		}
 	}
 }

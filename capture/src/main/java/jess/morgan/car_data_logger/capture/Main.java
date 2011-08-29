@@ -80,12 +80,17 @@ public class Main {
 		}
 
 		Logger logger = new Logger(outfile);
+		List<Communicator> communicators = new ArrayList<Communicator>();
 		for(Connection connection : connections) {
-			System.out.println("Connecting to " + connection.getPortName() + " at " + connection.getSpeed() + " baud");
-			new Communicator(connection.getPortName(), connection.getSpeed(), logger);
+			communicators.add(new Communicator(connection, logger));
 		}
+
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		br.readLine();
+		System.out.println("Stopping system...");
+		for(Communicator communicator : communicators) {
+			communicator.stop();
+		}
 		logger.stop();
 	}
 }

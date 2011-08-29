@@ -55,7 +55,7 @@ public class Logger {
 	public void stop() {
 		this.running.set(false);
 		loggingThread.interrupt();
-		
+		System.out.println("Stopping logger - writing remaining " + messageQueue.size() + " messages...");
 	}
 
 	private class LoggingThread extends Thread {
@@ -65,12 +65,12 @@ public class Logger {
 
 		@Override
 		public void run() {
-			while(isRunning()) {
+			while(isRunning() || !messageQueue.isEmpty()) {
 				Message message;
 				try {
 					message = messageQueue.take();
 				} catch (InterruptedException e) {
-					if(isRunning()) {
+					if(isRunning() || !messageQueue.isEmpty()) {
 						continue;
 					} else {
 						break;
@@ -81,6 +81,8 @@ public class Logger {
 				}
 			}
 			out.close();
+			running.set(false);
+			System.out.println("Logger stopped");
 		}
 	}
 }

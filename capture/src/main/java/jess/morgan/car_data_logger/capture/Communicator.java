@@ -28,6 +28,7 @@ import gnu.io.UnsupportedCommOperationException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Communicator {
@@ -36,6 +37,20 @@ public class Communicator {
 
 	public Communicator(Connection connection, Logger logger) throws NoSuchPortException, PortInUseException, UnsupportedCommOperationException, IOException {
 		SerialPort serial = connect(connection.getPortName(), connection.getSpeed());
+
+		if(connection.getInitCommand() != null) {
+			System.out.println("Sending init commands to " + connection.getPortName());
+			OutputStream os = serial.getOutputStream();
+			for(String command : connection.getInitCommand().split(";")) {
+				os.write((command + '\r').getBytes("US-ASCII"));
+				try {
+					Thread.sleep(500);
+				} catch (InterruptedException e) {
+					continue;
+				}
+			}
+			os.close();
+		}
 
 		try {
 			thread = new CommunicatorThread(logger, serial);

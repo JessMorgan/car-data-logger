@@ -26,11 +26,12 @@ import java.util.List;
 
 public class Main {
 	public static void usage() {
-		System.out.println("USAGE: java -jar capture.jar -o outfile.log <comm port>:speed <comm port>:speed ...");
+		System.out.println("USAGE: java -jar capture.jar -o outfile.log <comm port>:speed [--elm elm-init-commands] <comm port>:speed ...");
 		System.out.println();
 		System.out.println("Comm port should be com1, com2, etc. on Windows - or /dev/ttyUSB0, /dev/ttyS0, etc. on Linux");
 		System.out.println("Arduino uses /dev/ttyACM0 on Linux - you need to create a symlink to /dev/ttyS10 or something");
 		System.out.println("Speed parameter can use suffixes (i.e. 500,000 can be 500000, 500k, or .5m)");
+		System.out.println("Elm initialization commands in the form 'ATZ;ATZ;ATSP6;ATCAF0;ATH1;ATAL;ATMA'.  Semicolons will be replaced with carriage returns, and a carriage return will be appended to the entire command string.  These commands will be applied to the first comm port after the elm init command string.");
 	}
 
 	public static void main(String[] args) throws Exception {
@@ -57,6 +58,21 @@ public class Main {
 					return;
 				}
 				outfile = new File(args[i]);
+			} else if(args[i].equalsIgnoreCase("--elm")) {
+				i += 2;
+				if(i >= args.length) {
+					usage();
+					return;
+				}
+
+				String initString = args[i - 1];
+				try {
+					Connection connection = Connection.createFromArgument(args[i], initString);
+					connections.add(connection);
+				} catch(IllegalArgumentException iae) {
+					usage();
+					return;
+				}
 			} else {
 				try {
 					Connection connection = Connection.createFromArgument(args[i]);

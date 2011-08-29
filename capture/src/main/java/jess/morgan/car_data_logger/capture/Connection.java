@@ -5,10 +5,12 @@ import java.math.BigDecimal;
 public class Connection {
 	private final String portName;
 	private final int speed;
+	private final String initCommand;
 
-	private Connection(String portName, int speed) {
+	private Connection(String portName, int speed, String initCommand) {
 		this.portName = portName;
 		this.speed = speed;
+		this.initCommand = initCommand;
 	}
 
 	/**
@@ -54,7 +56,12 @@ public class Connection {
 			speed = speed.scaleByPowerOfTen(6);
 		}
 
-		return new Connection(portName, speed.intValue());
+		return new Connection(portName, speed.intValue(), null);
+	}
+
+	public static Connection createFromArgument(String arg, String initString) {
+		Connection connection = createFromArgument(arg);
+		return new Connection(connection.getPortName(), connection.getSpeed(), initString);
 	}
 
 	public String getPortName() {
@@ -63,5 +70,9 @@ public class Connection {
 
 	public int getSpeed() {
 		return speed;
+	}
+
+	public String getInitCommand() {
+		return initCommand;
 	}
 }

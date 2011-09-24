@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -32,7 +33,7 @@ public class DecodeCAN implements DataDecoder {
 	public DecodeCAN(List<Config> configList) {
 		eval = new BuiltInJavaScriptEvalImpl();
 
-		config = new HashMap<String, List<Config>>();
+		config = new LinkedHashMap<String, List<Config>>();
 		// Fill in map - each message id should have a list of associated configs
 		for(Config c : configList) {
 			List<Config> messageConfigs = config.get(c.getMessageId());

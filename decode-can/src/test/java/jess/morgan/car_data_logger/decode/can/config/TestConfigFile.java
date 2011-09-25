@@ -1,4 +1,4 @@
-package jess.morgan.car_data_logger.decode_can.config;
+package jess.morgan.car_data_logger.decode.can.config;
 
 import static org.junit.Assert.assertEquals;
 

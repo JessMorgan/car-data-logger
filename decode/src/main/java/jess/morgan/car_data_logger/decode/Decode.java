@@ -13,8 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import jess.morgan.car_data_logger.decode_api.DataDecoder;
-import jess.morgan.car_data_logger.decode_can.DecodeCAN;
+import jess.morgan.car_data_logger.decode.can.DecodeCAN;
 
 public class Decode {
 	private final DataDecoder decoder;

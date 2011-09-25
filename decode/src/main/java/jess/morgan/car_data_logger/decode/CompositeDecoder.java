@@ -6,8 +6,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import jess.morgan.car_data_logger.decode_api.DataDecoder;
-
 public class CompositeDecoder implements DataDecoder {
 	private final List<DataDecoder> decoders;
 

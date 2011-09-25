@@ -1,4 +1,4 @@
-package jess.morgan.car_data_logger.decode_can.eval;
+package jess.morgan.car_data_logger.decode.can.eval;
 
 public class EvalException extends Exception {
 	private static final long serialVersionUID = 3489710131003369474L;

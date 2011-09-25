@@ -1,4 +1,4 @@
-package jess.morgan.car_data_logger.decode_can.eval;
+package jess.morgan.car_data_logger.decode.can.eval;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;

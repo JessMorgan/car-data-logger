@@ -1,4 +1,4 @@
-package jess.morgan.car_data_logger.decode_can;
+package jess.morgan.car_data_logger.decode.can;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,12 +11,12 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import jess.morgan.car_data_logger.decode_api.DataDecoder;
-import jess.morgan.car_data_logger.decode_can.config.Config;
-import jess.morgan.car_data_logger.decode_can.config.ConfigFile;
-import jess.morgan.car_data_logger.decode_can.eval.BuiltInJavaScriptEvalImpl;
-import jess.morgan.car_data_logger.decode_can.eval.Eval;
-import jess.morgan.car_data_logger.decode_can.eval.EvalException;
+import jess.morgan.car_data_logger.decode.DataDecoder;
+import jess.morgan.car_data_logger.decode.can.config.Config;
+import jess.morgan.car_data_logger.decode.can.config.ConfigFile;
+import jess.morgan.car_data_logger.decode.can.eval.BuiltInJavaScriptEvalImpl;
+import jess.morgan.car_data_logger.decode.can.eval.Eval;
+import jess.morgan.car_data_logger.decode.can.eval.EvalException;
 
 public class DecodeCAN implements DataDecoder {
 	private static final Pattern PATTERN = Pattern.compile("^\\[(\\d+)\\] ([0-9a-fA-F]+) ([0-9a-fA-F ]+)$");

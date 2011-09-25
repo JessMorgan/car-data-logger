@@ -1,4 +1,4 @@
-package jess.morgan.car_data_logger.decode_can;
+package jess.morgan.car_data_logger.decode.can;
 
 public class Data {
 	private final String parameterName;

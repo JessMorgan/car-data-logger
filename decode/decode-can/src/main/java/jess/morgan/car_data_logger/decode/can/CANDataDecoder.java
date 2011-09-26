@@ -38,7 +38,7 @@ import jess.morgan.car_data_logger.decode.can.eval.Eval;
 import jess.morgan.car_data_logger.decode.can.eval.EvalException;
 
 public class CANDataDecoder extends AbstractDataDecoder {
-	private static final Pattern PATTERN = Pattern.compile("^\\[(\\d+)\\] ([0-9a-fA-F]+) ([0-9a-fA-F ]+)$");
+	private static final Pattern PATTERN = Pattern.compile("^\\[\\d+\\] ([0-9a-fA-F]+) ([0-9a-fA-F ]+)$");
 	private final Map<String, List<Config>> config;
 	private final Eval eval;
 
@@ -80,9 +80,8 @@ public class CANDataDecoder extends AbstractDataDecoder {
 			return null;
 		}
 
-		String timestamp = m.group(1);
-		String messageId = m.group(2);
-		String data = m.group(3);
+		String messageId = m.group(1);
+		String data = m.group(2);
 		String[] bytes = data.split("\\s+");
 
 		List<Config> messageConfigs = config.get(messageId);
@@ -91,8 +90,6 @@ public class CANDataDecoder extends AbstractDataDecoder {
 		}
 
 		Map<String, String> values = new HashMap<String, String>();
-		values.put("timestamp", timestamp);
-
 		long dataValue;
 		for(Config messageConfig : messageConfigs) {
 			dataValue = getDataValue(messageConfig, bytes, line);

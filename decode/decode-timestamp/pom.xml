@@ -25,14 +25,15 @@ along with car-data-logger.  If not, see <http://www.gnu.org/licenses/>.
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>jess.morgan.car-data-logger</groupId>
-	<artifactId>decode</artifactId>
+	<artifactId>decode-timestamp</artifactId>
 	<version>0.1.0-SNAPSHOT</version>
-	<packaging>pom</packaging>
-	<name>Decode</name>
-	<description>Extracts all useful data from track logs</description>
-	<modules>
-		<module>decode-api</module>
-		<module>decode-timestamp</module>
-		<module>decode-can</module>
-	</modules>
+	<name>Decode CAN</name>
+	<description>Finds the timestamp in each message</description>
+	<dependencies>
+		<dependency>
+			<groupId>jess.morgan.car-data-logger</groupId>
+			<artifactId>decode-api</artifactId>
+			<version>0.1.0-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
 </project>

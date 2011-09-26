@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import jess.morgan.car_data_logger.decode.AbstractDataDecoder;
 import jess.morgan.car_data_logger.decode.DataDecoder;
 import jess.morgan.car_data_logger.decode.can.config.Config;
 import jess.morgan.car_data_logger.decode.can.config.ConfigFile;
@@ -18,19 +19,19 @@ import jess.morgan.car_data_logger.decode.can.eval.BuiltInJavaScriptEvalImpl;
 import jess.morgan.car_data_logger.decode.can.eval.Eval;
 import jess.morgan.car_data_logger.decode.can.eval.EvalException;
 
-public class DecodeCAN implements DataDecoder {
+public class CANDataDecoder extends AbstractDataDecoder {
 	private static final Pattern PATTERN = Pattern.compile("^\\[(\\d+)\\] ([0-9a-fA-F]+) ([0-9a-fA-F ]+)$");
 	private final Map<String, List<Config>> config;
 	private final Eval eval;
 
-	public DecodeCAN(File configFile) throws IOException {
+	public CANDataDecoder(File configFile) throws IOException {
 		this(ConfigFile.readConfig(configFile));
 	}
-	public DecodeCAN(InputStream configStream) throws IOException {
+	public CANDataDecoder(InputStream configStream) throws IOException {
 		this(ConfigFile.readConfig(configStream));
 	}
 
-	public DecodeCAN(List<Config> configList) {
+	public CANDataDecoder(List<Config> configList) {
 		eval = new BuiltInJavaScriptEvalImpl();
 
 		config = new LinkedHashMap<String, List<Config>>();
@@ -55,7 +56,7 @@ public class DecodeCAN implements DataDecoder {
 		return parameters;
 	}
 
-	public Map<String, String> decodeData(String line) {
+	public Map<String, String> decodeLine(String line) {
 		Matcher m = PATTERN.matcher(line);
 		if(!m.matches()) {
 			return null;
@@ -95,6 +96,7 @@ public class DecodeCAN implements DataDecoder {
 	private String scriptSubstitution(String algorithm, long dataValue) {
 		return algorithm.replace("{}", Long.toString(dataValue));
 	}
+
 	private long getDataValue(Config messageConfig, String[] bytes, String line) {
 		if(messageConfig.getEndByte() >= bytes.length) {
 			System.err.println("Expected at least " + messageConfig.getEndByte() + " data bytes, received " + bytes.length + " (" + messageConfig + ") " + line);
@@ -112,13 +114,14 @@ public class DecodeCAN implements DataDecoder {
 			throw new IllegalArgumentException(nfe);
 		}
 	}
+
 	public static void main(String[] args) throws IOException {
-		DataDecoder decoder = new DecodeCAN(new File("config/2004-mazda-rx8-us.cfg"));
+		DataDecoder decoder = new CANDataDecoder(new File("config/2004-mazda-rx8-us.cfg"));
 		for(String param : decoder.getAvailableParameters()) {
 			System.out.println(param);
 		}
 		System.out.println();
-		Map<String, String> data = decoder.decodeData("[1724435917370] 201 8C B7 FF FF 51 FB 76 FF");
+		Map<String, String> data = decoder.decodeLine("[1724435917370] 201 8C B7 FF FF 51 FB 76 FF");
 		for(Map.Entry<String, String> entry : data.entrySet()) {
 			System.out.println(entry.getKey() + ": " + entry.getValue());
 		}

@@ -1,9 +1,6 @@
 package jess.morgan.car_data_logger.decode;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -13,20 +10,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import jess.morgan.car_data_logger.decode.can.DecodeCAN;
-
-public class Decode {
-	private final DataDecoder decoder;
-
-	public Decode(DataDecoder... decoders) {
-		this.decoder = new CompositeDecoder(decoders);
-	}
-
-	public void decode(InputStream is, OutputStream os) throws IOException {
+public abstract class AbstractDataDecoder implements DataDecoder {
+	public final void decodeStream(InputStream is, OutputStream os) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(is));
 		PrintWriter out = new PrintWriter(os);
 
-		List<String> header = decoder.getAvailableParameters();
+		List<String> header = getAvailableParameters();
 		header.add(0, "timestamp");
 		try {
 			// Print file header
@@ -35,7 +24,7 @@ public class Decode {
 			String line;
 			while(null != (line = br.readLine())) {
 				// Decode line
-				Map<String, String> data = decoder.decodeData(line);
+				Map<String, String> data = decodeLine(line);
 				// Match up position of decoded items with proper labels
 				List<String> values = new ArrayList<String>();
 				for(String parameter : header) {
@@ -65,10 +54,5 @@ public class Decode {
 			sb.append(value).append(',');
 		}
 		return sb.length() > 0 ? sb.substring(0, sb.length() - 1) : "";
-	}
-
-	public static void main(String[] args) throws IOException {
-		Decode decode = new Decode(new DecodeCAN(new File("../decode-can/config/2004-mazda-rx8-us.cfg")));
-		decode.decode(new FileInputStream("run6.cropped.log"), new FileOutputStream("run6.csv"));
 	}
 }

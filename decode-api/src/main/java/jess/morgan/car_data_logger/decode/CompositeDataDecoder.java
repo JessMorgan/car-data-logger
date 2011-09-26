@@ -6,13 +6,13 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CompositeDecoder implements DataDecoder {
+public class CompositeDataDecoder extends AbstractDataDecoder {
 	private final List<DataDecoder> decoders;
 
-	public CompositeDecoder(DataDecoder... decoders) {
+	public CompositeDataDecoder(DataDecoder... decoders) {
 		this(Arrays.asList(decoders));
 	}
-	public CompositeDecoder(List<DataDecoder> decoders) {
+	public CompositeDataDecoder(List<DataDecoder> decoders) {
 		this.decoders = decoders;
 	}
 
@@ -24,11 +24,11 @@ public class CompositeDecoder implements DataDecoder {
 		return parameters;
 	}
 
-	public Map<String, String> decodeData(String line) {
+	public Map<String, String> decodeLine(String line) {
 		Map<String, String> data = new LinkedHashMap<String, String>();
 		Map<String, String> thisData;
 		for(DataDecoder decoder : decoders) {
-			thisData = decoder.decodeData(line);
+			thisData = decoder.decodeLine(line);
 			if(thisData != null) {
 				data.putAll(thisData);
 			}

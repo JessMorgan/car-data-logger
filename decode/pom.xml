@@ -22,8 +22,9 @@ along with car-data-logger.  If not, see <http://www.gnu.org/licenses/>.
 	<groupId>jess.morgan.car-data-logger</groupId>
 	<artifactId>decode</artifactId>
 	<version>0.1.0-SNAPSHOT</version>
-	<name>Decode CAN</name>
-	<description>Uses decoders to extract all useful data from track logs</description>
+	<packaging>pom</packaging>
+	<name>Decode</name>
+	<description>Extracts all useful data from track logs</description>
 	<inceptionYear>2011</inceptionYear>
 	<licenses>
 		<license>
@@ -39,11 +40,8 @@ along with car-data-logger.  If not, see <http://www.gnu.org/licenses/>.
 			<timezone>-5</timezone>
 		</developer>
 	</developers>
-	<dependencies>
-		<dependency>
-			<groupId>jess.morgan.car-data-logger</groupId>
-			<artifactId>decode-api</artifactId>
-			<version>0.1.0-SNAPSHOT</version>
-		</dependency>
-	</dependencies>
+	<modules>
+		<module>decode-api</module>
+		<module>decode-can</module>
+	</modules>
 </project>

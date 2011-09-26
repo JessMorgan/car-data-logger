@@ -18,31 +18,21 @@ along with car-data-logger.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<parent>
+		<groupId>jess.morgan.car-data-logger</groupId>
+		<artifactId>parent</artifactId>
+		<version>1</version>
+	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>jess.morgan.car-data-logger</groupId>
 	<artifactId>capture</artifactId>
 	<version>0.1.0-SNAPSHOT</version>
 	<name>Data Capture</name>
 	<description>Reads data from multiple serial inputs and combines into a single data file</description>
-	<inceptionYear>2011</inceptionYear>
 	<properties>
 		<rxtx.version>2.1-7</rxtx.version>
 		<rxtx.suffix>-r2</rxtx.suffix>
 	</properties>
-	<licenses>
-		<license>
-			<name>GNU General Public License (GPL)</name>
-			<comments>Version 3</comments>
-			<url>http://www.gnu.org/licenses/gpl-3.0.html</url>
-		</license>
-	</licenses>
-	<developers>
-		<developer>
-			<name>Jess Morgan</name>
-			<email>Jessica.Morgan.skis@gmail.com</email>
-			<timezone>-5</timezone>
-		</developer>
-	</developers>
 	<dependencies>
 		<dependency>
 			<groupId>org.qbang.rxtx</groupId>

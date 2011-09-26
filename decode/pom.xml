@@ -18,6 +18,11 @@ along with car-data-logger.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<parent>
+		<groupId>jess.morgan.car-data-logger</groupId>
+		<artifactId>parent</artifactId>
+		<version>1</version>
+	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>jess.morgan.car-data-logger</groupId>
 	<artifactId>decode</artifactId>
@@ -25,21 +30,6 @@ along with car-data-logger.  If not, see <http://www.gnu.org/licenses/>.
 	<packaging>pom</packaging>
 	<name>Decode</name>
 	<description>Extracts all useful data from track logs</description>
-	<inceptionYear>2011</inceptionYear>
-	<licenses>
-		<license>
-			<name>GNU General Public License (GPL)</name>
-			<comments>Version 3</comments>
-			<url>http://www.gnu.org/licenses/gpl-3.0.html</url>
-		</license>
-	</licenses>
-	<developers>
-		<developer>
-			<name>Jess Morgan</name>
-			<email>Jessica.Morgan.skis@gmail.com</email>
-			<timezone>-5</timezone>
-		</developer>
-	</developers>
 	<modules>
 		<module>decode-api</module>
 		<module>decode-can</module>

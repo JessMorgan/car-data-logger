@@ -18,28 +18,26 @@ along with car-data-logger.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<parent>
-		<groupId>jess.morgan.car-data-logger</groupId>
-		<artifactId>parent</artifactId>
-		<version>1</version>
-	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>jess.morgan.car-data-logger</groupId>
-	<artifactId>decode-can</artifactId>
-	<version>0.1.0-SNAPSHOT</version>
-	<name>Decode CAN</name>
-	<description>Interprets CAN bus data</description>
-	<dependencies>
-		<dependency>
-			<groupId>jess.morgan.car-data-logger</groupId>
-			<artifactId>decode-api</artifactId>
-			<version>0.1.0-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.9</version>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
+	<artifactId>parent</artifactId>
+	<version>1</version>
+	<packaging>pom</packaging>
+	<name>Car Data Logger Parent</name>
+	<description>Parent POM for inheritance of shared settings</description>
+	<inceptionYear>2011</inceptionYear>
+	<licenses>
+		<license>
+			<name>GNU General Public License (GPL)</name>
+			<comments>Version 3</comments>
+			<url>http://www.gnu.org/licenses/gpl-3.0.html</url>
+		</license>
+	</licenses>
+	<developers>
+		<developer>
+			<name>Jess Morgan</name>
+			<email>Jessica.Morgan.skis@gmail.com</email>
+			<timezone>-5</timezone>
+		</developer>
+	</developers>
 </project>

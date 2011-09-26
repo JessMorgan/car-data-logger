@@ -25,21 +25,13 @@ along with car-data-logger.  If not, see <http://www.gnu.org/licenses/>.
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>jess.morgan.car-data-logger</groupId>
-	<artifactId>decode-can</artifactId>
+	<artifactId>car-data-logger</artifactId>
 	<version>0.1.0-SNAPSHOT</version>
-	<name>Decode CAN</name>
-	<description>Interprets CAN bus data</description>
-	<dependencies>
-		<dependency>
-			<groupId>jess.morgan.car-data-logger</groupId>
-			<artifactId>decode-api</artifactId>
-			<version>0.1.0-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.9</version>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
+	<packaging>pom</packaging>
+	<name>Car Data Logger</name>
+	<description>Open souce data logging and analyzing to help you achieve better times on the track</description>
+	<modules>
+		<module>capture</module>
+		<module>decode</module>
+	</modules>
 </project>

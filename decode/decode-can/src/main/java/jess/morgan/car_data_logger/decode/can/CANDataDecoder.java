@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -39,9 +40,22 @@ import jess.morgan.car_data_logger.decode.can.eval.EvalException;
 
 public class CANDataDecoder extends AbstractDataDecoder {
 	private static final Pattern PATTERN = Pattern.compile("^\\[\\d+\\] ([0-9a-fA-F]+) ([0-9a-fA-F ]+)$");
+	private static final String CONFIG_PROPERTY = CANDataDecoder.class.getName() + ".config";
 	private final Map<String, List<Config>> config;
 	private final Eval eval;
 
+	public CANDataDecoder() throws IOException {
+		String configName = System.getProperty(CONFIG_PROPERTY);
+		if(configName == null) {
+			throw new NullPointerException("No config specified.  Please set config file name as system property " + CONFIG_PROPERTY);
+		}
+
+		eval = new BuiltInJavaScriptEvalImpl();
+		config = buildConfig(ConfigFile.readConfig(new File(configName)));
+	}
+	public CANDataDecoder(String configFileName) throws IOException {
+		this(new File(configFileName));
+	}
 	public CANDataDecoder(File configFile) throws IOException {
 		this(ConfigFile.readConfig(configFile));
 	}
@@ -51,8 +65,11 @@ public class CANDataDecoder extends AbstractDataDecoder {
 
 	public CANDataDecoder(List<Config> configList) {
 		eval = new BuiltInJavaScriptEvalImpl();
+		config = buildConfig(configList);
+	}
 
-		config = new LinkedHashMap<String, List<Config>>();
+	private Map<String, List<Config>> buildConfig(List<Config> configList) {
+		Map<String, List<Config>> config = new LinkedHashMap<String, List<Config>>();
 		// Fill in map - each message id should have a list of associated configs
 		for(Config c : configList) {
 			List<Config> messageConfigs = config.get(c.getMessageId());
@@ -62,6 +79,8 @@ public class CANDataDecoder extends AbstractDataDecoder {
 			}
 			messageConfigs.add(c);
 		}
+
+		return Collections.unmodifiableMap(config);
 	}
 
 	public List<String> getAvailableParameters() {

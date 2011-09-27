@@ -22,6 +22,7 @@ along with car-data-logger.  If not, see <http://www.gnu.org/licenses/>.
 		<groupId>jess.morgan.car-data-logger</groupId>
 		<artifactId>parent</artifactId>
 		<version>1</version>
+		<relativePath>parent</relativePath>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>jess.morgan.car-data-logger</groupId>
@@ -31,6 +32,7 @@ along with car-data-logger.  If not, see <http://www.gnu.org/licenses/>.
 	<name>Car Data Logger</name>
 	<description>Open souce data logging and analyzing to help you achieve better times on the track</description>
 	<modules>
+		<module>parent</module>
 		<module>capture</module>
 		<module>decode</module>
 	</modules>

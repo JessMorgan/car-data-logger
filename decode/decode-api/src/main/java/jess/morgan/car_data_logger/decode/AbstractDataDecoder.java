@@ -29,39 +29,44 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class AbstractDataDecoder implements DataDecoder {
+	public final List<Map<String, String>> decodeStream(InputStream is) throws IOException {
+		final List<Map<String, String>> allData = new ArrayList<Map<String, String>>();
+		streamDriver(is, new DataHandler() {
+			@Override
+			public void handleData(Map<String, String> data) {
+				allData.add(data);
+			}
+		});
+
+		return allData;
+	}
+
 	public final void decodeStream(InputStream is, OutputStream os) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(is));
-		PrintWriter out = new PrintWriter(os);
+		final PrintWriter out = new PrintWriter(os);
+		final List<String> header = getAvailableParameters();
 
-		List<String> header = getAvailableParameters();
-		header.add(0, "timestamp");
+		// Print file header
+		out.println(buildLineCSV(header));
+
 		try {
-			// Print file header
-			out.println(buildLineCSV(header));
-
-			String line;
-			while(null != (line = br.readLine())) {
-				// Decode line
-				Map<String, String> data = decodeLine(line);
-				// Match up position of decoded items with proper labels
-				List<String> values = new ArrayList<String>();
-				for(String parameter : header) {
-					String value = data.get(parameter);
-					if(value == null) {
-						value = "";
+			streamDriver(is, new DataHandler() {
+				@Override
+				public void handleData(Map<String, String> data) {
+					// Match up position of decoded items with proper labels
+					List<String> values = new ArrayList<String>();
+					for(String parameter : header) {
+						String value = data.get(parameter);
+						if(value == null) {
+							value = "";
+						}
+						value.replace(',', ';');
+						values.add(value);
 					}
-					value.replace(',', ';');
-					values.add(value);
+					// Print decoded line
+					out.println(buildLineCSV(values));
 				}
-				// Print decoded line
-				out.println(buildLineCSV(values));
-			}
+			});
 		} finally {
-			try {
-				br.close();
-			} catch(IOException ioe) {
-				// Ignore
-			}
 			out.close();
 		}
 	}
@@ -72,5 +77,26 @@ public abstract class AbstractDataDecoder implements DataDecoder {
 			sb.append(value).append(',');
 		}
 		return sb.length() > 0 ? sb.substring(0, sb.length() - 1) : "";
+	}
+
+	private interface DataHandler {
+		public void handleData(Map<String, String> data);
+	}
+	private void streamDriver(InputStream is, DataHandler handler) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(is));
+
+		try {
+			String line;
+			while(null != (line = br.readLine())) {
+				// Decode line
+				handler.handleData(decodeLine(line));
+			}
+		} finally {
+			try {
+				br.close();
+			} catch(IOException ioe) {
+				// Ignore
+			}
+		}
 	}
 }

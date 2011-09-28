@@ -80,12 +80,7 @@ public abstract class AbstractDataDecoder implements DataDecoder {
 					// Match up position of decoded items with proper labels
 					List<String> values = new ArrayList<String>();
 					for(String parameter : header) {
-						String value = data.get(parameter);
-						if(value == null) {
-							value = "";
-						}
-						value.replace(',', ';');
-						values.add(value);
+						values.add(data.get(parameter));
 					}
 					// Print decoded line
 					out.println(buildLineCSV(values));
@@ -99,7 +94,7 @@ public abstract class AbstractDataDecoder implements DataDecoder {
 	private String buildLineCSV(List<String> values) {
 		StringBuilder sb = new StringBuilder();
 		for(String value : values) {
-			sb.append(value).append(',');
+			sb.append(value == null ? "" : value.replace(',', ';')).append(',');
 		}
 		return sb.length() > 0 ? sb.substring(0, sb.length() - 1) : "";
 	}

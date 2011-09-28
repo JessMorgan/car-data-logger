@@ -27,5 +27,7 @@ import java.util.Map;
 public interface DataDecoder {
 	public List<String> getAvailableParameters();
 	public void decodeStream(InputStream is, OutputStream os) throws IOException;
+	public List<Map<String, String>> decodeStream(InputStream is) throws IOException;
+	public void writeData(List<Map<String, String>> data, OutputStream os);
 	public Map<String, String> decodeLine(String line);
 }

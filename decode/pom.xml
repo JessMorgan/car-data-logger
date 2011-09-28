@@ -33,7 +33,6 @@ along with car-data-logger.  If not, see <http://www.gnu.org/licenses/>.
 	<description>Extracts all useful data from track logs</description>
 	<modules>
 		<module>decode-api</module>
-		<module>decode-timestamp</module>
 		<module>decode-can</module>
 	</modules>
 </project>

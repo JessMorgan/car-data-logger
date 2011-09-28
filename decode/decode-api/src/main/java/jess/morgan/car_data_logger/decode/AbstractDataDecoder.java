@@ -91,6 +91,28 @@ public abstract class AbstractDataDecoder implements DataDecoder {
 		}
 	}
 
+	public final void writeData(List<Map<String, String>> data, OutputStream os) {
+		final PrintWriter out = new PrintWriter(os);
+		final List<String> header = getAvailableParameters();
+
+		try {
+			// Print file header
+			out.println(buildLineCSV(header));
+
+			for(Map<String, String> line : data) {
+				// Match up position of decoded items with proper labels
+				List<String> values = new ArrayList<String>();
+				for(String parameter : header) {
+					values.add(line.get(parameter));
+				}
+				// Print decoded line
+				out.println(buildLineCSV(values));
+			}
+		} finally {
+			out.close();
+		}
+	}
+
 	private String buildLineCSV(List<String> values) {
 		StringBuilder sb = new StringBuilder();
 		for(String value : values) {

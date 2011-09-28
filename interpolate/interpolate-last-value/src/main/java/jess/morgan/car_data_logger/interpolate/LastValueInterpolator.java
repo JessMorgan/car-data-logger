@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,7 +17,7 @@ public class LastValueInterpolator implements Interpolator {
 		Map<String, String> lastValue = null;
 		for(Map<String, String> line : data) {
 			if(lastValue == null) {
-				lastValue = line;
+				lastValue = new HashMap<String, String>(line);
 			} else {
 				for(Map.Entry<String, String> entry : line.entrySet()) {
 					if(entry.getValue() != null && !entry.getValue().trim().isEmpty()) {

@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with car-data-logger.  If not, see <http://www.gnu.org/licenses/>.
  */
-package jess.morgan.car_data_logger.decode.timestamp;
+package jess.morgan.car_data_logger.decode;
 
 import java.util.Collections;
 import java.util.List;
@@ -24,7 +24,6 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import jess.morgan.car_data_logger.decode.AbstractDataDecoder;
 
 public class TimestampDataDecoder extends AbstractDataDecoder {
 	private static final Pattern PATTERN = Pattern.compile("^\\[(\\d+)\\].*");

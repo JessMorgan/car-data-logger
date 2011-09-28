@@ -70,10 +70,10 @@ public abstract class AbstractDataDecoder implements DataDecoder {
 		final PrintWriter out = new PrintWriter(os);
 		final List<String> header = getAvailableParameters();
 
-		// Print file header
-		out.println(buildLineCSV(header));
-
 		try {
+			// Print file header
+			out.println(buildLineCSV(header));
+
 			streamDriver(is, new DataHandler() {
 				@Override
 				public void handleData(Map<String, String> data) {

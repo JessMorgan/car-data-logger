@@ -22,18 +22,19 @@ along with car-data-logger.  If not, see <http://www.gnu.org/licenses/>.
 		<groupId>jess.morgan.car-data-logger</groupId>
 		<artifactId>parent</artifactId>
 		<version>1</version>
-		<relativePath>../parent</relativePath>
+		<relativePath>../../parent</relativePath>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>jess.morgan.car-data-logger</groupId>
-	<artifactId>interpolate</artifactId>
+	<artifactId>interpolate-linear</artifactId>
 	<version>0.1.0-SNAPSHOT</version>
-	<packaging>pom</packaging>
-	<name>Interpolate</name>
-	<description>Fills in gaps in track data</description>
-	<modules>
-		<module>interpolate-api</module>
-		<module>interpolate-last-value</module>
-		<module>interpolate-linear</module>
-	</modules>
+	<name>Linear Interpolator</name>
+	<description>Interpolation method that uses straight lines between known points to fill in missing data</description>
+	<dependencies>
+		<dependency>
+			<groupId>jess.morgan.car-data-logger</groupId>
+			<artifactId>interpolate-api</artifactId>
+			<version>0.1.0-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
 </project>

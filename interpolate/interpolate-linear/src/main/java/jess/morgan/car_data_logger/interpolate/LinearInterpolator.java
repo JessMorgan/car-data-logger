@@ -1,17 +1,24 @@
 package jess.morgan.car_data_logger.interpolate;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import net.xeoh.plugins.base.impl.PluginManagerFactory;
+import net.xeoh.plugins.base.options.AddPluginsFromOption;
+import net.xeoh.plugins.base.util.PluginManagerUtil;
+
 import jess.morgan.car_data_logger.decode.AbstractDataDecoder;
+import jess.morgan.car_data_logger.decode.ConfigParameter;
 import jess.morgan.car_data_logger.decode.DataDecoder;
+import jess.morgan.car_data_logger.decode.DataDecoderFactory;
 
 public class LinearInterpolator implements Interpolator {
 	@Override
@@ -70,13 +77,39 @@ public class LinearInterpolator implements Interpolator {
 	}
 
 	public static void main(String[] args) throws Exception {
-		long startTime = System.currentTimeMillis();
 		System.out.println("Loading decoders");
-		DataDecoder decoder =
-				AbstractDataDecoder.getDecoders(
-						Collections.singletonList(
-								Arrays.asList(
-										"jess.morgan.car_data_logger.decode.can.CANDataDecoder", "../../decode/decode-can/config/2004-mazda-rx8-us.cfg")));
+		long startTime = System.currentTimeMillis();
+
+		PluginManagerUtil pluginManager = new PluginManagerUtil(PluginManagerFactory.createPluginManager());
+		pluginManager.addPluginsFrom(
+				new File("/home/jess/.m2/repository/jess/morgan/car-data-logger/decode-can/0.1.0-SNAPSHOT/decode-can-0.1.0-SNAPSHOT.jar").toURI(),
+				(AddPluginsFromOption[])null);
+		Collection<DataDecoderFactory> dataDecoderFactories = pluginManager.getPlugins(DataDecoderFactory.class);
+		List<DataDecoder> decoders = new ArrayList<DataDecoder>();
+		File canConfigFile = new File("/home/jess/eclipse-workspace/car-data-logger/decode/decode-can/config/2004-mazda-rx8-us.cfg");
+		for(DataDecoderFactory factory : dataDecoderFactories) {
+			System.out.println("Plugin loaded: " + factory.getPluginDisplayName());
+
+			Map<String, Object> config = new HashMap<String, Object>();
+			ConfigParameter[] params = factory.getConfigParameters();
+			for(ConfigParameter param : params) {
+				if(param.isRequired()) {
+					System.out.println("Required parameter: " + param);
+				} else {
+					System.out.println("Optional parameter: " + param);
+				}
+				if("CANDataDecoderFactory".equals(factory.getClass().getSimpleName())
+						&& "configFile".equals(param.getName())
+						&& File.class.equals(param.getType())) {
+					System.out.println("Supplying value: " + canConfigFile.getPath());
+					config.put(param.getName(), canConfigFile);
+				}
+			}
+
+			decoders.add(factory.getDecoder(config));
+		}
+
+		DataDecoder decoder = AbstractDataDecoder.getDecoders(decoders);
 		System.out.println("Decoders loaded (" + (System.currentTimeMillis() - startTime) + ") - decoding file");
 		startTime = System.currentTimeMillis();
 		List<Map<String, String>> data = decoder.decodeStream(new FileInputStream("/home/jess/car-data-logs/autocross-2011-09-17/run6.cropped.log"));

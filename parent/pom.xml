@@ -40,6 +40,9 @@ along with car-data-logger.  If not, see <http://www.gnu.org/licenses/>.
 			<timezone>-5</timezone>
 		</developer>
 	</developers>
+	<properties>
+		<jspf.version>1.0.2</jspf.version>
+	</properties>
 	<build>
 		<plugins>
 			<plugin>
@@ -51,6 +54,34 @@ along with car-data-logger.  If not, see <http://www.gnu.org/licenses/>.
 					<target>1.6</target>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-install-plugin</artifactId>
+				<version>2.3.1</version>
+				<inherited>false</inherited>
+				<executions>
+					<execution>
+						<phase>initialize</phase>
+						<goals>
+							<goal>install-file</goal>
+						</goals>
+						<configuration>
+							<file>${basedir}/lib/jspf.core-${jspf.version}.jar</file>
+							<groupId>net.xeoh.jspf</groupId>
+							<artifactId>jspf.core</artifactId>
+							<version>${jspf.version}</version>
+							<packaging>jar</packaging>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
+	<dependencies>
+		<dependency>
+			<groupId>net.xeoh.jspf</groupId>
+			<artifactId>jspf.core</artifactId>
+			<version>${jspf.version}</version>
+		</dependency>
+	</dependencies>
 </project>

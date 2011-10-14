@@ -24,34 +24,16 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public abstract class AbstractDataDecoder implements DataDecoder {
-	public static DataDecoder getDecoder(String className, String parameter) throws Exception {
-		Class<?> clazz = Class.forName(className);
-		DataDecoder instance;
-		if(parameter == null) {
-			instance = (DataDecoder) clazz.newInstance();
-		} else {
-			Constructor<?> constructor = clazz.getConstructor(String.class);
-			instance = (DataDecoder) constructor.newInstance(parameter);
-		}
-		return instance;
-	}
-	public static DataDecoder getDecoders(List<List<String>> config) throws Exception {
-		List<DataDecoder> decoders = new ArrayList<DataDecoder>();
-		decoders.add(new TimestampDataDecoder());
-		for(List<String> decoderConfig : config) {
-			if(decoderConfig.size() == 1) {
-				decoders.add(getDecoder(decoderConfig.get(0), null));
-			} else {
-				decoders.add(getDecoder(decoderConfig.get(0), decoderConfig.get(1)));
-			}
-		}
-		return new CompositeDataDecoder(decoders);
+	public static DataDecoder getDecoders(List<DataDecoder> decoders) {
+		List<DataDecoder> _decoders = new ArrayList<DataDecoder>();
+		_decoders.add(new TimestampDataDecoder());
+		_decoders.addAll(decoders);
+		return new CompositeDataDecoder(_decoders);
 	}
 
 	public final List<Map<String, String>> decodeStream(InputStream is) throws IOException {
@@ -140,12 +122,5 @@ public abstract class AbstractDataDecoder implements DataDecoder {
 				// Ignore
 			}
 		}
-	}
-
-	public static void main(String[] args) throws Exception {
-		DataDecoder timestamp = AbstractDataDecoder.getDecoder("jess.morgan.car_data_logger.decode.timestamp.TimestampDataDecoder", null);
-		DataDecoder can = AbstractDataDecoder.getDecoder("jess.morgan.car_data_logger.decode.can.CANDataDecoder", "../decode-can/config/2004-mazda-rx8-us.cfg");
-		DataDecoder composite = new CompositeDataDecoder(timestamp, can);
-		System.out.println(composite.decodeLine("[1724435917370] 201 8C B7 FF FF 51 FB 76 FF"));
 	}
 }

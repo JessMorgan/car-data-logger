@@ -1,0 +1,113 @@
+<!--
+Copyright 2011 Jess Morgan
+
+This file is part of car-data-logger.
+
+car-data-logger is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+car-data-logger is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with car-data-logger.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<parent>
+		<groupId>jess.morgan.car-data-logger</groupId>
+		<artifactId>parent</artifactId>
+		<version>1</version>
+		<relativePath>../parent</relativePath>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>jess.morgan.car-data-logger</groupId>
+	<artifactId>release</artifactId>
+	<version>0.1.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<name>Release</name>
+	<description>Responsible for generating a release</description>
+	<properties>
+		<release.dir>${project.build.directory}/release-${project.version}</release.dir>
+		<app.dir>${release.dir}/app</app.dir>
+		<lib.dir>${release.dir}/lib</lib.dir>
+		<plugin.dir>${release.dir}/plugins</plugin.dir>
+
+		<capture.version>0.1.0-SNAPSHOT</capture.version>
+		<decode.app.version>0.1.0-SNAPSHOT</decode.app.version>
+		<decode.api.version>0.1.0-SNAPSHOT</decode.api.version>
+		<decode.can.version>0.1.0-SNAPSHOT</decode.can.version>
+		<interpolate.api.version>0.1.0-SNAPSHOT</interpolate.api.version>
+		<interpolate.last.value.version>0.1.0-SNAPSHOT</interpolate.last.value.version>
+		<interpolate.linear.version>0.1.0-SNAPSHOT</interpolate.linear.version>
+	</properties>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.3</version>
+				<executions>
+					<execution>
+						<id>package-release</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<inherited>false</inherited>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<outputDirectory>${app.dir}</outputDirectory>
+									<groupId>jess.morgan.car-data-logger</groupId>
+									<artifactId>capture</artifactId>
+									<version>${capture.version}</version>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${app.dir}</outputDirectory>
+									<groupId>jess.morgan.car-data-logger</groupId>
+									<artifactId>decode-app</artifactId>
+									<version>${decode.app.version}</version>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${lib.dir}</outputDirectory>
+									<groupId>jess.morgan.car-data-logger</groupId>
+									<artifactId>decode-api</artifactId>
+									<version>${decode.api.version}</version>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${lib.dir}</outputDirectory>
+									<groupId>jess.morgan.car-data-logger</groupId>
+									<artifactId>interpolate-api</artifactId>
+									<version>${interpolate.api.version}</version>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${plugin.dir}</outputDirectory>
+									<groupId>jess.morgan.car-data-logger</groupId>
+									<artifactId>decode-can</artifactId>
+									<version>${decode.can.version}</version>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${plugin.dir}</outputDirectory>
+									<groupId>jess.morgan.car-data-logger</groupId>
+									<artifactId>interpolate-last-value</artifactId>
+									<version>${interpolate.last.value.version}</version>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${plugin.dir}</outputDirectory>
+									<groupId>jess.morgan.car-data-logger</groupId>
+									<artifactId>interpolate-linear</artifactId>
+									<version>${interpolate.linear.version}</version>
+								</artifactItem>
+							</artifactItems>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>

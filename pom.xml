@@ -36,5 +36,6 @@ along with car-data-logger.  If not, see <http://www.gnu.org/licenses/>.
 		<module>decode</module>
 		<module>interpolate</module>
 		<module>app</module>
+		<module>release</module>
 	</modules>
 </project>

@@ -16,7 +16,8 @@ public class Config {
 	private List<File> pluginDirectories;
 	private List<String> decoders;
 	private Map<String, Map<String, String>> decoderConfig;
-	private String interpolator;
+	private List<String> dataProcessors;
+	private Map<String, Map<String, String>> dataProcessorConfig;
 
 	public Config() {
 		try {
@@ -31,7 +32,8 @@ public class Config {
 		pluginDirectories = Collections.singletonList(new File("plugins"));
 		decoders = null;
 		decoderConfig = new HashMap<String, Map<String, String>>();
-		interpolator = null;
+		dataProcessors = null;
+		dataProcessorConfig = new HashMap<String, Map<String, String>>();
 	}
 
 	public void loadConfigFile() throws IOException {
@@ -81,7 +83,30 @@ public class Config {
 				}
 			}
 
-			interpolator = properties.getProperty("plugin.interpolate");
+			int dataProcessorPluginCount = Integer.parseInt(properties.getProperty("plugin.data_processor.count", "0"));
+			dataProcessors = new ArrayList<String>();
+			dataProcessorConfig = new HashMap<String, Map<String, String>>();
+			for(int i = 1; i <= dataProcessorPluginCount; i++) {
+				String plugin = properties.getProperty("plugin.data_processor." + i);
+				if(plugin == null) {
+					System.out.println("Invalid properties file, using defaults (property missing: 'plugin.data_processor." + i + "')");
+					loadDefaults();
+					return;
+				}
+				dataProcessors.add(plugin);
+
+				// Load config for this plugin
+				int dataProcessorPluginConfigCount = Integer.parseInt(properties.getProperty("plugin.data_processor." + i + ".config.count", "0"));
+				if(dataProcessorPluginConfigCount > 0) {
+					Map<String, String> config = new HashMap<String, String>();
+					for(int j = 1; j <= dataProcessorPluginConfigCount; j++) {
+						config.put(
+								properties.getProperty("plugin.data_processor." + i + ".config." + j + ".key"),
+								properties.getProperty("plugin.data_processor." + i + ".config." + j + ".value"));
+					}
+					dataProcessorConfig.put(plugin, config);
+				}
+			}
 		} catch(NumberFormatException nfe) {
 			System.err.println("Invalid properties file, using defaults (" + nfe.getLocalizedMessage() + ")");
 			loadDefaults();
@@ -89,6 +114,7 @@ public class Config {
 	}
 
 	public void saveConfigFile() {
+		// TODO
 	}
 
 	public List<File> getPluginDirectories() {
@@ -127,11 +153,11 @@ public class Config {
 		}
 	}
 
-	public String getInterpolator() {
-		return interpolator;
+	public List<String> getDataProcessors() {
+		return dataProcessors;
 	}
 
-	public void setInterpolator(String interpolator) {
-		this.interpolator = interpolator;
+	public void setDataProcessors(List<String> dataProcessors) {
+		this.dataProcessors = dataProcessors;
 	}
 }

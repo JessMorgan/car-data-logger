@@ -29,7 +29,7 @@ along with car-data-logger.  If not, see <http://www.gnu.org/licenses/>.
 	<artifactId>decode-app</artifactId>
 	<version>0.1.0-SNAPSHOT</version>
 	<name>Decode App</name>
-	<description>Application to manage data decoding and interpolation</description>
+	<description>Application to manage data decoding and processing</description>
 	<dependencies>
 		<dependency>
 			<groupId>jess.morgan.car-data-logger</groupId>
@@ -38,7 +38,7 @@ along with car-data-logger.  If not, see <http://www.gnu.org/licenses/>.
 		</dependency>
 		<dependency>
 			<groupId>jess.morgan.car-data-logger</groupId>
-			<artifactId>interpolate-api</artifactId>
+			<artifactId>data-processor-api</artifactId>
 			<version>0.1.0-SNAPSHOT</version>
 		</dependency>
 	</dependencies>

@@ -5,9 +5,9 @@ import java.util.Map;
 
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
-import jess.morgan.car_data_logger.decode.ConfigParameter;
 import jess.morgan.car_data_logger.decode.DataDecoder;
 import jess.morgan.car_data_logger.decode.DataDecoderFactory;
+import jess.morgan.car_data_logger.plugin.ConfigParameter;
 
 @PluginImplementation
 public class CANDataDecoderFactory implements DataDecoderFactory {
@@ -24,7 +24,7 @@ public class CANDataDecoderFactory implements DataDecoderFactory {
 	}
 
 	@Override
-	public DataDecoder getDecoder(Map<String, Object> config) throws Exception {
+	public DataDecoder getPlugin(Map<String, Object> config) throws Exception {
 		Object configFile;
 		if(config == null || (configFile = config.get("configFile")) == null) {
 			throw new IllegalArgumentException("configFile parameter is required");

@@ -9,10 +9,12 @@ import net.xeoh.plugins.base.impl.PluginManagerFactory;
 import net.xeoh.plugins.base.options.AddPluginsFromOption;
 import net.xeoh.plugins.base.util.PluginManagerUtil;
 
-import jess.morgan.car_data_logger.decode.ConfigParameter;
+import jess.morgan.car_data_logger.data_processor.DataProcessor;
+import jess.morgan.car_data_logger.data_processor.DataProcessorFactory;
 import jess.morgan.car_data_logger.decode.DataDecoder;
 import jess.morgan.car_data_logger.decode.DataDecoderFactory;
-import jess.morgan.car_data_logger.interpolate.Interpolator;
+import jess.morgan.car_data_logger.plugin.ConfigParameter;
+import jess.morgan.car_data_logger.plugin.PluginFactory;
 
 public class PluginManager {
 	private PluginManagerUtil pluginManager;
@@ -27,16 +29,25 @@ public class PluginManager {
 	}
 
 	public DataDecoder loadDecoder(String className, Map<String, String> config) throws Exception {
-		for(DataDecoderFactory factory : pluginManager.getPlugins(DataDecoderFactory.class)) {
-			Map<String, Object> decoderConfig = new HashMap<String, Object>();
+		return loadPlugin(className, config, DataDecoderFactory.class);
+	}
+
+	public DataProcessor loadDataProcessor(String className, Map<String, String> config) throws Exception {
+		return loadPlugin(className, config, DataProcessorFactory.class);
+	}
+
+	public <E, T extends PluginFactory<E>> E loadPlugin(String className, Map<String, String> config, Class<T> clazz)
+			throws Exception {
+		for(PluginFactory<E> factory : pluginManager.getPlugins(clazz)) {
+			Map<String, Object> pluginConfig = new HashMap<String, Object>();
 			if(factory.getClass().getName().equals(className)) {
 				for(ConfigParameter param : factory.getConfigParameters()) {
 					String value = config.get(param.getName());
 					if(value != null) {
-						decoderConfig.put(param.getName(), marshallValue(value, param.getType()));
+						pluginConfig.put(param.getName(), marshallValue(value, param.getType()));
 					}
 				}
-				return factory.getDecoder(decoderConfig);
+				return factory.getPlugin(pluginConfig);
 			}
 		}
 		return null;
@@ -49,14 +60,5 @@ public class PluginManager {
 			return new File(value);
 		}
 		return value;
-	}
-
-	public Interpolator loadInterpolator(String className) {
-		for(Interpolator interpolator : pluginManager.getPlugins(Interpolator.class)) {
-			if(interpolator.getClass().getName().equals(className)) {
-				return interpolator;
-			}
-		}
-		return null;
 	}
 }

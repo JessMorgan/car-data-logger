@@ -1,0 +1,20 @@
+[ ] Cleanup config for decode-app (remove count properties)
+[ ] Proper CLI for decode-app
+[ ] GUI for decode-app
+[ ] Progress bars for decode-app GUI
+[ ]   Line number callback for decoder
+[ ] Move jspf from parent to plugin (or create separate module)
+[ ] Remove jspf dependency added to all projects
+
+[ ] Create new data processors:
+[ ]   Accelerometer 
+[ ]   Empty field removal
+
+[ ] Create new decoders:
+[ ]   Accelerometer / Gyro
+[ ]   GPS
+
+[ ] New apps:
+[ ]   Track image creator
+[ ]   Data visualizer (output data on series of transparent pngs, for video overlay)
+

@@ -38,12 +38,13 @@ along with car-data-logger.  If not, see <http://www.gnu.org/licenses/>.
 		<plugin.dir>${release.dir}/plugins</plugin.dir>
 
 		<capture.version>0.1.0-SNAPSHOT</capture.version>
+		<data.processor.api.version>0.1.0-SNAPSHOT</data.processor.api.version>
 		<decode.app.version>0.1.0-SNAPSHOT</decode.app.version>
 		<decode.api.version>0.1.0-SNAPSHOT</decode.api.version>
 		<decode.can.version>0.1.0-SNAPSHOT</decode.can.version>
-		<interpolate.api.version>0.1.0-SNAPSHOT</interpolate.api.version>
 		<interpolate.last.value.version>0.1.0-SNAPSHOT</interpolate.last.value.version>
 		<interpolate.linear.version>0.1.0-SNAPSHOT</interpolate.linear.version>
+		<plugin.version>0.1.0-SNAPSHOT</plugin.version>
 	</properties>
 	<build>
 		<plugins>
@@ -76,14 +77,20 @@ along with car-data-logger.  If not, see <http://www.gnu.org/licenses/>.
 								<artifactItem>
 									<outputDirectory>${lib.dir}</outputDirectory>
 									<groupId>jess.morgan.car-data-logger</groupId>
+									<artifactId>plugin</artifactId>
+									<version>${plugin.version}</version>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${lib.dir}</outputDirectory>
+									<groupId>jess.morgan.car-data-logger</groupId>
 									<artifactId>decode-api</artifactId>
 									<version>${decode.api.version}</version>
 								</artifactItem>
 								<artifactItem>
 									<outputDirectory>${lib.dir}</outputDirectory>
 									<groupId>jess.morgan.car-data-logger</groupId>
-									<artifactId>interpolate-api</artifactId>
-									<version>${interpolate.api.version}</version>
+									<artifactId>data-processor-api</artifactId>
+									<version>${data.processor.api.version}</version>
 								</artifactItem>
 								<artifactItem>
 									<outputDirectory>${plugin.dir}</outputDirectory>

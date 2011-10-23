@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import jess.morgan.car_data_logger.data_processor.DataProcessor;
 import jess.morgan.car_data_logger.decode.AbstractDataDecoder;
 import jess.morgan.car_data_logger.decode.DataDecoder;
-import jess.morgan.car_data_logger.interpolate.Interpolator;
 
 public class Application {
 	public static void main(String[] args) throws IOException {
@@ -19,6 +19,7 @@ public class Application {
 
 		Config config = new Config();
 		PluginManager pluginManager = new PluginManager(config.getPluginDirectories());
+
 		List<DataDecoder> decoders = new ArrayList<DataDecoder>();
 		for(String decoderClassName : config.getDecoders()) {
 			try {
@@ -35,11 +36,27 @@ public class Application {
 			}
 		}
 
-		Interpolator interpolator = pluginManager.loadInterpolator(config.getInterpolator());
+		List<DataProcessor> dataProcessors = new ArrayList<DataProcessor>();
+		for(String dataProcessorClassName : config.getDataProcessors()) {
+			try {
+				dataProcessors.add(
+						pluginManager.loadDataProcessor(
+								dataProcessorClassName,
+								config.getDecoderConfig(dataProcessorClassName)
+								)
+						);
+			} catch (Exception e) {
+				System.err.println("Error loading data processor plugin: " + dataProcessorClassName);
+				e.printStackTrace();
+				return;
+			}
+		}
 
 		DataDecoder decoder = AbstractDataDecoder.getDecoders(decoders);
 		List<Map<String, String>> data = decoder.decodeStream(new FileInputStream(inFile));
-		interpolator.interpolate(data, false);
+		for(DataProcessor dataProcessor : dataProcessors) {
+			dataProcessor.process(data);
+		}
 		decoder.writeData(data, new FileOutputStream(outFile));
 	}
 }

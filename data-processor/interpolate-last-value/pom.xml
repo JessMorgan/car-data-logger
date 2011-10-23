@@ -22,21 +22,19 @@ along with car-data-logger.  If not, see <http://www.gnu.org/licenses/>.
 		<groupId>jess.morgan.car-data-logger</groupId>
 		<artifactId>parent</artifactId>
 		<version>1</version>
-		<relativePath>parent</relativePath>
+		<relativePath>../../parent</relativePath>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>jess.morgan.car-data-logger</groupId>
-	<artifactId>car-data-logger</artifactId>
+	<artifactId>interpolate-last-value</artifactId>
 	<version>0.1.0-SNAPSHOT</version>
-	<packaging>pom</packaging>
-	<name>Car Data Logger</name>
-	<description>Open souce data logging and analyzing to help you achieve better times on the track</description>
-	<modules>
-		<module>parent</module>
-		<module>plugin</module>
-		<module>decode</module>
-		<module>data-processor</module>
-		<module>app</module>
-		<module>release</module>
-	</modules>
+	<name>Last Value Interpolator</name>
+	<description>Fills in gaps in track data by simply uses the last known value</description>
+	<dependencies>
+		<dependency>
+			<groupId>jess.morgan.car-data-logger</groupId>
+			<artifactId>data-processor-api</artifactId>
+			<version>0.1.0-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
 </project>

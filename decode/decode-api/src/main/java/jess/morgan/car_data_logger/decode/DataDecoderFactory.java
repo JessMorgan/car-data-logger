@@ -1,11 +1,6 @@
 package jess.morgan.car_data_logger.decode;
 
-import java.util.Map;
+import jess.morgan.car_data_logger.plugin.PluginFactory;
 
-import net.xeoh.plugins.base.Plugin;
-
-public interface DataDecoderFactory extends Plugin {
-	public String getPluginDisplayName();
-	public ConfigParameter[] getConfigParameters();
-	public DataDecoder getDecoder(Map<String, Object> config) throws Exception;
+public interface DataDecoderFactory extends PluginFactory<DataDecoder> {
 }

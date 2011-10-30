@@ -1,5 +1,7 @@
 package jess.morgan.car_data_logger.plugin;
 
+import java.util.Map;
+
 public class ConfigParameter {
 	private final String name;
 	private final String displayName;
@@ -34,5 +36,19 @@ public class ConfigParameter {
 				.append("{displayName:'").append(displayName).append("', ")
 				.append("type:").append(type.getSimpleName()).append("}")
 				.toString();
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> T getParameter(Map<String, Object> config, String parameterName, Class<T> type, boolean required) {
+		Object value = null;
+		if((config == null || (value = config.get(parameterName)) == null) && required) {
+			throw new IllegalArgumentException(parameterName + " is required");
+		}
+		if(value != null && !(type.isInstance(value))) {
+			throw new IllegalArgumentException(
+					parameterName + " is a " + value.getClass().getSimpleName()
+					+ ", but must be a " + type.getSimpleName());
+		}
+		return (T)value;
 	}
 }

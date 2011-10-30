@@ -25,13 +25,8 @@ public class CANDataDecoderFactory implements DataDecoderFactory {
 
 	@Override
 	public DataDecoder getPlugin(Map<String, Object> config) throws Exception {
-		Object configFile;
-		if(config == null || (configFile = config.get("configFile")) == null) {
-			throw new IllegalArgumentException("configFile parameter is required");
-		}
-		if(!(configFile instanceof File)) {
-			throw new IllegalArgumentException("configFile parameter must be a File");
-		}
-		return new CANDataDecoder((File)configFile);
+		File configFile = ConfigParameter.getParameter(config, "configFile", File.class, true);
+
+		return new CANDataDecoder(configFile);
 	}
 }

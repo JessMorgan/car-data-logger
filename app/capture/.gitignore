@@ -1,7 +1,3 @@
-/.classpath
-/.project
-/.settings
 /librxtx*
 /rxtx*.*
 !/rxtx-*-bins*/
-/target

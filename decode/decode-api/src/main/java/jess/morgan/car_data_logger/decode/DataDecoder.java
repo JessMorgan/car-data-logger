@@ -25,7 +25,10 @@ import java.util.List;
 import java.util.Map;
 
 public interface DataDecoder {
-	public List<String> getAvailableParameters();
+	/**
+	 * @return the parameters this data decoder can return, with parameter name as key and unit as value
+	 */
+	public Map<String, String> getAvailableParameters();
 	public void decodeStream(InputStream is, OutputStream os) throws IOException;
 	public List<Map<String, String>> decodeStream(InputStream is) throws IOException;
 	public void writeData(List<Map<String, String>> data, OutputStream os);

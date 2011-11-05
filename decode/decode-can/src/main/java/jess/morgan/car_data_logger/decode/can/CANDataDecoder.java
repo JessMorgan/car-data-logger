@@ -31,7 +31,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import jess.morgan.car_data_logger.decode.AbstractDataDecoder;
-import jess.morgan.car_data_logger.decode.DataDecoder;
 import jess.morgan.car_data_logger.decode.can.config.Config;
 import jess.morgan.car_data_logger.decode.can.config.ConfigFile;
 import jess.morgan.car_data_logger.decode.can.eval.BuiltInJavaScriptEvalImpl;
@@ -83,11 +82,11 @@ public class CANDataDecoder extends AbstractDataDecoder {
 		return Collections.unmodifiableMap(config);
 	}
 
-	public List<String> getAvailableParameters() {
-		List<String> parameters = new ArrayList<String>();
+	public Map<String, String> getAvailableParameters() {
+		Map<String, String> parameters = new LinkedHashMap<String, String>();
 		for(List<Config> configList : config.values()) {
 			for(Config c : configList) {
-				parameters.add(new Data(c.getParameterName(), c.getUnit(), null).getDisplayName());
+				parameters.put(c.getParameterName(), c.getUnit());
 			}
 		}
 		return parameters;
@@ -120,8 +119,7 @@ public class CANDataDecoder extends AbstractDataDecoder {
 				e.printStackTrace();
 				continue;
 			}
-			Data d = new Data(messageConfig.getParameterName(), messageConfig.getUnit(), value);
-			values.put(d.getDisplayName(), d.getValue());
+			values.put(messageConfig.getParameterName(), value);
 		}
 
 		return values;
@@ -146,18 +144,6 @@ public class CANDataDecoder extends AbstractDataDecoder {
 		} catch(NumberFormatException nfe) {
 			System.err.println("Illegal value found: " + sb.toString() + " (" + messageConfig + ") " + line);
 			throw new IllegalArgumentException(nfe);
-		}
-	}
-
-	public static void main(String[] args) throws IOException {
-		DataDecoder decoder = new CANDataDecoder(new File("config/2004-mazda-rx8-us.cfg"));
-		for(String param : decoder.getAvailableParameters()) {
-			System.out.println(param);
-		}
-		System.out.println();
-		Map<String, String> data = decoder.decodeLine("[1724435917370] 201 8C B7 FF FF 51 FB 76 FF");
-		for(Map.Entry<String, String> entry : data.entrySet()) {
-			System.out.println(entry.getKey() + ": " + entry.getValue());
 		}
 	}
 }

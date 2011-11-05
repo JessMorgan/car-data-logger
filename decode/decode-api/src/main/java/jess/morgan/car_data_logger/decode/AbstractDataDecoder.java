@@ -50,18 +50,25 @@ public abstract class AbstractDataDecoder implements DataDecoder {
 
 	public final void decodeStream(InputStream is, OutputStream os) throws IOException {
 		final PrintWriter out = new PrintWriter(os);
-		final List<String> header = getAvailableParameters();
+		final Map<String, String> parameters = getAvailableParameters();
+		final List<String> paramNames = new ArrayList<String>(parameters.size());
+		final List<String> units = new ArrayList<String>(parameters.size());
+		for(Map.Entry<String, String> parameter : parameters.entrySet()) {
+			paramNames.add(parameter.getKey());
+			units.add(parameter.getValue());
+		}
 
 		try {
 			// Print file header
-			out.println(buildLineCSV(header));
+			out.println(buildLineCSV(paramNames));
+			out.println(buildLineCSV(units));
 
 			streamDriver(is, new DataHandler() {
 				@Override
 				public void handleData(Map<String, String> data) {
 					// Match up position of decoded items with proper labels
 					List<String> values = new ArrayList<String>();
-					for(String parameter : header) {
+					for(String parameter : paramNames) {
 						values.add(data.get(parameter));
 					}
 					// Print decoded line
@@ -75,16 +82,23 @@ public abstract class AbstractDataDecoder implements DataDecoder {
 
 	public final void writeData(List<Map<String, String>> data, OutputStream os) {
 		final PrintWriter out = new PrintWriter(os);
-		final List<String> header = getAvailableParameters();
+		final Map<String, String> parameters = getAvailableParameters();
+		final List<String> paramNames = new ArrayList<String>(parameters.size());
+		final List<String> units = new ArrayList<String>(parameters.size());
+		for(Map.Entry<String, String> parameter : parameters.entrySet()) {
+			paramNames.add(parameter.getKey());
+			units.add(parameter.getValue());
+		}
 
 		try {
 			// Print file header
-			out.println(buildLineCSV(header));
+			out.println(buildLineCSV(paramNames));
+			out.println(buildLineCSV(units));
 
 			for(Map<String, String> line : data) {
 				// Match up position of decoded items with proper labels
 				List<String> values = new ArrayList<String>();
-				for(String parameter : header) {
+				for(String parameter : paramNames) {
 					values.add(line.get(parameter));
 				}
 				// Print decoded line

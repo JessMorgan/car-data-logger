@@ -18,7 +18,6 @@
  */
 package jess.morgan.car_data_logger.decode;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -34,10 +33,10 @@ public class CompositeDataDecoder extends AbstractDataDecoder {
 		this.decoders = decoders;
 	}
 
-	public List<String> getAvailableParameters() {
-		List<String> parameters = new ArrayList<String>();
+	public Map<String, String> getAvailableParameters() {
+		Map<String, String> parameters = new LinkedHashMap<String, String>();
 		for(DataDecoder decoder : decoders) {
-			parameters.addAll(decoder.getAvailableParameters());
+			parameters.putAll(decoder.getAvailableParameters());
 		}
 		return parameters;
 	}

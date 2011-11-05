@@ -19,7 +19,6 @@
 package jess.morgan.car_data_logger.decode;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -27,8 +26,8 @@ import java.util.regex.Pattern;
 public class TimestampDataDecoder extends AbstractDataDecoder {
 	private static final Pattern PATTERN = Pattern.compile("^\\[(\\d+)\\].*");
 
-	public List<String> getAvailableParameters() {
-		return Collections.singletonList("Timestamp");
+	public Map<String, String> getAvailableParameters() {
+		return Collections.singletonMap("Timestamp", "nanoseconds");
 	}
 
 	public Map<String, String> decodeLine(String line) {

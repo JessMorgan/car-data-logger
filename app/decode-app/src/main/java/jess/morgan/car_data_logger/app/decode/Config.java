@@ -46,66 +46,72 @@ public class Config {
 			is.close();
 		}
 		try {
-			int pluginPathCount = Integer.parseInt(properties.getProperty("plugin.path.count", "0"));
 			pluginDirectories = new ArrayList<File>();
-			for(int i = 1; i <= pluginPathCount; i++) {
+			for(int i = 1; ; i++) {
 				String path = properties.getProperty("plugin.path." + i);
 				if(path == null) {
-					System.out.println("Invalid properties file, using defaults (property missing: 'plugin.path." + i + "')");
-					loadDefaults();
-					return;
+					if(pluginDirectories.isEmpty()) {
+						System.out.println("Invalid properties file, using defaults (property missing: 'plugin.path." + i + "')");
+						loadDefaults();
+						return;
+					}
+					break;
 				}
 				pluginDirectories.add(new File(path));
 			}
 
-			int decodePluginCount = Integer.parseInt(properties.getProperty("plugin.decode.count", "0"));
 			decoders = new ArrayList<String>();
 			decoderConfig = new HashMap<String, Map<String, String>>();
-			for(int i = 1; i <= decodePluginCount; i++) {
+			for(int i = 1; ; i++) {
 				String plugin = properties.getProperty("plugin.decode." + i);
 				if(plugin == null) {
-					System.out.println("Invalid properties file, using defaults (property missing: 'plugin.decode." + i + "')");
-					loadDefaults();
-					return;
+					if(decoders.isEmpty()) {
+						System.out.println("Invalid properties file, using defaults (property missing: 'plugin.decode." + i + "')");
+						loadDefaults();
+						return;
+					}
+					break;
 				}
 				decoders.add(plugin);
 
 				// Load config for this plugin
-				int decodePluginConfigCount = Integer.parseInt(properties.getProperty("plugin.decode." + i + ".config.count", "0"));
-				if(decodePluginConfigCount > 0) {
-					Map<String, String> config = new HashMap<String, String>();
-					for(int j = 1; j <= decodePluginConfigCount; j++) {
-						config.put(
-								properties.getProperty("plugin.decode." + i + ".config." + j + ".key"),
-								properties.getProperty("plugin.decode." + i + ".config." + j + ".value"));
+				Map<String, String> config = new HashMap<String, String>();
+				for(int j = 1; ; j++) {
+					String key   = properties.getProperty("plugin.decode." + i + ".config." + j + ".key");
+					String value = properties.getProperty("plugin.decode." + i + ".config." + j + ".value");
+					if(key == null) {
+						break;
 					}
-					decoderConfig.put(plugin, config);
+					config.put(key, value);
 				}
+				decoderConfig.put(plugin, config);
 			}
 
-			int dataProcessorPluginCount = Integer.parseInt(properties.getProperty("plugin.data_processor.count", "0"));
 			dataProcessors = new ArrayList<String>();
 			dataProcessorConfig = new HashMap<String, Map<String, String>>();
-			for(int i = 1; i <= dataProcessorPluginCount; i++) {
+			for(int i = 1; ; i++) {
 				String plugin = properties.getProperty("plugin.data_processor." + i);
 				if(plugin == null) {
-					System.out.println("Invalid properties file, using defaults (property missing: 'plugin.data_processor." + i + "')");
-					loadDefaults();
-					return;
+					if(dataProcessors.isEmpty()) {
+						System.out.println("Invalid properties file, using defaults (property missing: 'plugin.data_processor." + i + "')");
+						loadDefaults();
+						return;
+					}
+					break;
 				}
 				dataProcessors.add(plugin);
 
 				// Load config for this plugin
-				int dataProcessorPluginConfigCount = Integer.parseInt(properties.getProperty("plugin.data_processor." + i + ".config.count", "0"));
-				if(dataProcessorPluginConfigCount > 0) {
-					Map<String, String> config = new HashMap<String, String>();
-					for(int j = 1; j <= dataProcessorPluginConfigCount; j++) {
-						config.put(
-								properties.getProperty("plugin.data_processor." + i + ".config." + j + ".key"),
-								properties.getProperty("plugin.data_processor." + i + ".config." + j + ".value"));
+				Map<String, String> config = new HashMap<String, String>();
+				for(int j = 1; ; j++) {
+					String key   = properties.getProperty("plugin.data_processor." + i + ".config." + j + ".key");
+					String value = properties.getProperty("plugin.data_processor." + i + ".config." + j + ".value");
+					if(key == null) {
+						break;
 					}
-					dataProcessorConfig.put(plugin, config);
+					config.put(key, value);
 				}
+				dataProcessorConfig.put(plugin, config);
 			}
 		} catch(NumberFormatException nfe) {
 			System.err.println("Invalid properties file, using defaults (" + nfe.getLocalizedMessage() + ")");

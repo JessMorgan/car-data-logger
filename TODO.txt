@@ -1,4 +1,3 @@
-[ ] Cleanup config for decode-app (remove count properties)
 [ ] Proper CLI for decode-app
 [ ] GUI for decode-app
 [ ] Progress bars for decode-app GUI

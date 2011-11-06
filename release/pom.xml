@@ -45,6 +45,10 @@ along with car-data-logger.  If not, see <http://www.gnu.org/licenses/>.
 		<interpolate.last.value.version>0.1.0-SNAPSHOT</interpolate.last.value.version>
 		<interpolate.linear.version>0.1.0-SNAPSHOT</interpolate.linear.version>
 		<plugin.version>0.1.0-SNAPSHOT</plugin.version>
+		<rx8.speedo.tach.version>0.1.0-SNAPSHOT</rx8.speedo.tach.version>
+		<video.overlay.version>0.1.0-SNAPSHOT</video.overlay.version>
+		<video.overlay.gauge.api.version>0.1.0-SNAPSHOT</video.overlay.gauge.api.version>
+		<video.overlay.bar.gauge.version>0.1.0-SNAPSHOT</video.overlay.bar.gauge.version>
 	</properties>
 	<build>
 		<plugins>
@@ -75,6 +79,12 @@ along with car-data-logger.  If not, see <http://www.gnu.org/licenses/>.
 									<version>${decode.app.version}</version>
 								</artifactItem>
 								<artifactItem>
+									<outputDirectory>${app.dir}</outputDirectory>
+									<groupId>jess.morgan.car-data-logger</groupId>
+									<artifactId>video-overlay</artifactId>
+									<version>${video.overlay.version}</version>
+								</artifactItem>
+								<artifactItem>
 									<outputDirectory>${lib.dir}</outputDirectory>
 									<groupId>jess.morgan.car-data-logger</groupId>
 									<artifactId>plugin</artifactId>
@@ -93,6 +103,12 @@ along with car-data-logger.  If not, see <http://www.gnu.org/licenses/>.
 									<version>${data.processor.api.version}</version>
 								</artifactItem>
 								<artifactItem>
+									<outputDirectory>${lib.dir}</outputDirectory>
+									<groupId>jess.morgan.car-data-logger</groupId>
+									<artifactId>video-overlay-gauge-api</artifactId>
+									<version>${video.overlay.gauge.api.version}</version>
+								</artifactItem>
+								<artifactItem>
 									<outputDirectory>${plugin.dir}</outputDirectory>
 									<groupId>jess.morgan.car-data-logger</groupId>
 									<artifactId>decode-can</artifactId>
@@ -109,6 +125,18 @@ along with car-data-logger.  If not, see <http://www.gnu.org/licenses/>.
 									<groupId>jess.morgan.car-data-logger</groupId>
 									<artifactId>interpolate-linear</artifactId>
 									<version>${interpolate.linear.version}</version>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${plugin.dir}</outputDirectory>
+									<groupId>jess.morgan.car-data-logger</groupId>
+									<artifactId>rx8-speedo-tach</artifactId>
+									<version>${rx8.speedo.tach.version}</version>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${plugin.dir}</outputDirectory>
+									<groupId>jess.morgan.car-data-logger</groupId>
+									<artifactId>video-overlay-bar-gauge</artifactId>
+									<version>${video.overlay.bar.gauge.version}</version>
 								</artifactItem>
 							</artifactItems>
 						</configuration>

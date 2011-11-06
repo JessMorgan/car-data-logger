@@ -6,8 +6,9 @@
 [ ] Remove jspf dependency added to all projects
 
 [ ] Create new data processors:
-[ ]   Accelerometer 
+[ ]   Accelerometer (convert to Gs)
 [ ]   Empty field removal
+[ ]   GPS Lap Counter (also adds lap time) - parameters: lat/long for both ends of finish line
 
 [ ] Create new decoders:
 [ ]   Accelerometer / Gyro
@@ -16,4 +17,11 @@
 [ ] New apps:
 [ ]   Track image creator
 [ ]   Data visualizer (output data on series of transparent pngs, for video overlay)
-
+[ ]     Gauges:
+[ ]       Bar Gauge
+[X]         Basic functionality
+[ ]         Labels
+[ ]         SVG frame?
+            * Should SVG frame be in a base gauge class, so its functionality is available to all gauges?
+[ ]       RX-8 Style Speedometer/Tachometer
+[ ]       Threshold Image (E-Brake Light)

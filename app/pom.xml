@@ -34,5 +34,6 @@ along with car-data-logger.  If not, see <http://www.gnu.org/licenses/>.
 	<modules>
 		<module>capture</module>
 		<module>decode-app</module>
+		<module>video-overlay</module>
 	</modules>
 </project>

@@ -1,6 +1,7 @@
-package jess.morgan.car_data_logger.app.decode;
+package jess.morgan.car_data_logger.plugin;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,13 +9,6 @@ import java.util.Map;
 import net.xeoh.plugins.base.impl.PluginManagerFactory;
 import net.xeoh.plugins.base.options.AddPluginsFromOption;
 import net.xeoh.plugins.base.util.PluginManagerUtil;
-
-import jess.morgan.car_data_logger.data_processor.DataProcessor;
-import jess.morgan.car_data_logger.data_processor.DataProcessorFactory;
-import jess.morgan.car_data_logger.decode.DataDecoder;
-import jess.morgan.car_data_logger.decode.DataDecoderFactory;
-import jess.morgan.car_data_logger.plugin.ConfigParameter;
-import jess.morgan.car_data_logger.plugin.PluginFactory;
 
 public class PluginManager {
 	private PluginManagerUtil pluginManager;
@@ -26,14 +20,6 @@ public class PluginManager {
 					dir.toURI(),
 					(AddPluginsFromOption[])null);
 		}
-	}
-
-	public DataDecoder loadDecoder(String className, Map<String, String> config) throws Exception {
-		return loadPlugin(className, config, DataDecoderFactory.class);
-	}
-
-	public DataProcessor loadDataProcessor(String className, Map<String, String> config) throws Exception {
-		return loadPlugin(className, config, DataProcessorFactory.class);
 	}
 
 	public <E, T extends PluginFactory<E>> E loadPlugin(String className, Map<String, String> config, Class<T> clazz)
@@ -58,6 +44,18 @@ public class PluginManager {
 			return value;
 		} else if(File.class.equals(type)) {
 			return new File(value);
+		} else if(Boolean.class.equals(type)) {
+			return Boolean.parseBoolean(value);
+		} else if(Integer.class.equals(type)) {
+			return Integer.parseInt(value);
+		} else if(Long.class.equals(type)) {
+			return Long.parseLong(value);
+		} else if(Float.class.equals(type)) {
+			return Float.parseFloat(value);
+		} else if(Double.class.equals(type)) {
+			return Double.parseDouble(value);
+		} else if(BigDecimal.class.equals(type)) {
+			return new BigDecimal(value);
 		}
 		return value;
 	}

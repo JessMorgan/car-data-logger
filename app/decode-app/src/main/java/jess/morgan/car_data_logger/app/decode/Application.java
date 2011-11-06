@@ -9,8 +9,11 @@ import java.util.List;
 import java.util.Map;
 
 import jess.morgan.car_data_logger.data_processor.DataProcessor;
+import jess.morgan.car_data_logger.data_processor.DataProcessorFactory;
 import jess.morgan.car_data_logger.decode.AbstractDataDecoder;
 import jess.morgan.car_data_logger.decode.DataDecoder;
+import jess.morgan.car_data_logger.decode.DataDecoderFactory;
+import jess.morgan.car_data_logger.plugin.PluginManager;
 
 public class Application {
 	public static void main(String[] args) throws IOException {
@@ -24,9 +27,10 @@ public class Application {
 		for(String decoderClassName : config.getDecoders()) {
 			try {
 				decoders.add(
-						pluginManager.loadDecoder(
+						pluginManager.loadPlugin(
 								decoderClassName,
-								config.getDecoderConfig(decoderClassName)
+								config.getDecoderConfig(decoderClassName),
+								DataDecoderFactory.class
 								)
 						);
 			} catch (Exception e) {
@@ -40,9 +44,10 @@ public class Application {
 		for(String dataProcessorClassName : config.getDataProcessors()) {
 			try {
 				dataProcessors.add(
-						pluginManager.loadDataProcessor(
+						pluginManager.loadPlugin(
 								dataProcessorClassName,
-								config.getDecoderConfig(dataProcessorClassName)
+								config.getDecoderConfig(dataProcessorClassName),
+								DataProcessorFactory.class
 								)
 						);
 			} catch (Exception e) {

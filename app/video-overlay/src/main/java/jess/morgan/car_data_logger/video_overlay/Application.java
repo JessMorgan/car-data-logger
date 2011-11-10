@@ -52,33 +52,54 @@ public class Application {
 			frameCount++;
 		};
 
+		boolean rescale = config.isRescaleDataToVideo();
+		long lastTimestamp = 0;
+		if(rescale) {
+			BufferedReader br = new BufferedReader(new FileReader(inFile));
+			String[] paramNames = br.readLine().split(",");
+			String line = br.readLine();
+			Map<String, String> data = parseLine(line, paramNames);
+			String lastLine = line;
+			while(null != (line = br.readLine())) {
+				lastLine = line;
+			}
+			data = parseLine(lastLine, paramNames);
+			lastTimestamp = Long.parseLong(data.get("Timestamp"));
+		}
+
 		// Open data file and read headers
 		BufferedReader br = new BufferedReader(new FileReader(inFile));
 		String[] paramNames = br.readLine().split(",");
 		String[] units = br.readLine().split(",");
-		Map<String, String> data = readLine(br, paramNames);
+		Map<String, String> data = parseLine(br.readLine(), paramNames);
 
 		// Loop through frames
 		long firstTimestamp = Long.parseLong(data.get("Timestamp"));
 		long offset = config.getVideoOffsetSeconds().movePointRight(9).longValue();
 		BigDecimal fps = config.getVideoFPS();
-		long currentTimestamp = firstTimestamp;
-		long lastTimestamp = currentTimestamp;
+		long videoLength = BigDecimal.valueOf(frameCount).movePointRight(9).divideToIntegralValue(fps).longValue();
+		long currentTimestamp = scaleTimestamp(firstTimestamp, rescale, firstTimestamp, lastTimestamp, videoLength);
+		long previousTimestamp = currentTimestamp;
 		Map<String, String> lastData = data;
 		Map<String, String> currentData = data;
 		for(int frame = 1; frame <= frameCount; frame++) {
-			long targetTimestamp = firstTimestamp + offset
+			long targetTimestamp = offset
 					+ new BigDecimal(frame - 1).movePointRight(9).divideToIntegralValue(fps).longValue();
 			// Fast forward in the data to the target timestamp
 			while(currentTimestamp < targetTimestamp) {
-				lastTimestamp = currentTimestamp;
+				previousTimestamp = currentTimestamp;
 				lastData = currentData;
-				currentData = readLine(br, paramNames);
-				currentTimestamp = Long.parseLong(currentData.get("Timestamp"));
+				currentData = parseLine(br.readLine(), paramNames);
+				currentTimestamp = scaleTimestamp(
+						Long.parseLong(currentData.get("Timestamp")),
+						rescale,
+						firstTimestamp,
+						lastTimestamp,
+						videoLength);
 			}
 			// Figure out which is closer to the target: currentTimestamp or lastTimestamp.  Use whichever data is closer.
 			long currentDistance = Math.abs(currentTimestamp - targetTimestamp);
-			long lastDistance = Math.abs(targetTimestamp - lastTimestamp);
+			long lastDistance = Math.abs(targetTimestamp - previousTimestamp);
 			data = (currentDistance <= lastDistance) ? currentData : lastData;
 			// Load the source frame
 			BufferedImage image = ImageIO.read(new File(String.format(framesSrcPath, frame)));
@@ -106,8 +127,19 @@ public class Application {
 		}
 	}
 
-	private static Map<String, String> readLine(BufferedReader br, String[] paramNames) throws IOException {
-		String line = br.readLine();
+	private static long scaleTimestamp(
+			long currentTimestamp,
+			boolean rescaleTimestamps,
+			long firstTimestamp,
+			long lastTimestamp,
+			long videoLength) {
+		if(!rescaleTimestamps) {
+			return currentTimestamp - firstTimestamp;
+		}
+		return (long)(((double)(currentTimestamp - firstTimestamp) * videoLength) / (lastTimestamp - firstTimestamp));
+	}
+
+	private static Map<String, String> parseLine(String line, String[] paramNames) {
 		if(line == null) {
 			return null;
 		}

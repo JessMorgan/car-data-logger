@@ -17,6 +17,7 @@
 [ ] New apps:
 [ ]   Track image creator
 [ ]   Data visualizer (output data on series of transparent pngs, for video overlay)
+[ ]     Use multiple cpu cores for speedup?
 [ ]     Gauges:
 [ ]       Bar Gauge
 [X]         Basic functionality
@@ -25,3 +26,4 @@
             * Should SVG frame be in a base gauge class, so its functionality is available to all gauges?
 [ ]       RX-8 Style Speedometer/Tachometer
 [ ]       Threshold Image (E-Brake Light)
+[ ]       Rotated Image (Steering Wheel)

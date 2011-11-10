@@ -20,6 +20,7 @@ public class Config {
 	private BigDecimal videoFPS;
 	private BigDecimal videoOffsetSeconds;
 	private List<GaugeInfo> gauges;
+	private boolean rescaleDataToVideo;
 
 	public Config() throws IOException {
 		loadConfigFile();
@@ -51,6 +52,7 @@ public class Config {
 		videoFramesDestPath = getRequiredValue(properties, "video.frames.dest.path");
 		videoFPS            = new BigDecimal(getRequiredValue(properties, "video.fps"));
 		videoOffsetSeconds  = new BigDecimal(getRequiredValue(properties, "video.offset.seconds"));
+		rescaleDataToVideo  = Boolean.parseBoolean(properties.getProperty("video.rescale.data", "false"));
 
 		gauges = new ArrayList<GaugeInfo>();
 		for(int i = 1; ; i++) {
@@ -146,5 +148,13 @@ public class Config {
 
 	public void setGauges(List<GaugeInfo> gauges) {
 		this.gauges = new ArrayList<GaugeInfo>(gauges);
+	}
+
+	public boolean isRescaleDataToVideo() {
+		return rescaleDataToVideo;
+	}
+
+	public void setRescaleDataToVideo(boolean rescaleDataToVideo) {
+		this.rescaleDataToVideo = rescaleDataToVideo;
 	}
 }

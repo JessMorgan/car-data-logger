@@ -10,6 +10,10 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
 
@@ -18,6 +22,8 @@ import jess.morgan.car_data_logger.video_overlay.gauge.Gauge;
 import jess.morgan.car_data_logger.video_overlay.gauge.GaugeFactory;
 
 public class Application {
+	private static final int THREADS = 2;
+
 	public static void main(String[] args) throws IOException {
 		File inFile = new File(args[0]);
 
@@ -73,6 +79,9 @@ public class Application {
 		String[] units = br.readLine().split(",");
 		Map<String, String> data = parseLine(br.readLine(), paramNames);
 
+		// Create thread pool
+		ExecutorService executor = Executors.newFixedThreadPool(THREADS);
+
 		// Loop through frames
 		long firstTimestamp = Long.parseLong(data.get("Timestamp"));
 		long offset = config.getVideoOffsetSeconds().movePointRight(9).longValue();
@@ -101,29 +110,72 @@ public class Application {
 			long currentDistance = Math.abs(currentTimestamp - targetTimestamp);
 			long lastDistance = Math.abs(targetTimestamp - previousTimestamp);
 			data = (currentDistance <= lastDistance) ? currentData : lastData;
+			// Run in the threadpool
+			executor.submit(
+					new DrawFrameThread(
+							String.format(framesSrcPath, frame),
+							String.format(framesDestPath, frame),
+							gauges,
+							data));
+		}
+		executor.shutdown();
+		try {
+			boolean keepWaiting = true;
+			do {
+				keepWaiting = !executor.awaitTermination(1, TimeUnit.MINUTES);
+				if(keepWaiting) {
+					System.out.println("Still waiting for execution to complete...");
+				}
+			} while(keepWaiting);
+		} catch (InterruptedException e) {
+			System.err.println("Interrupted - exiting");
+		}
+	}
+
+	private static class DrawFrameThread implements Callable<Void> {
+		private final String inFilename;
+		private final String outFilename;
+		private final Map<GaugeInfo, Gauge> gauges;
+		private final Map<String, String> data;
+
+		public DrawFrameThread(String inFilename, String outFilename, Map<GaugeInfo, Gauge> gauges, Map<String, String> data) {
+			this.inFilename = inFilename;
+			this.outFilename = outFilename;
+			this.gauges = new LinkedHashMap<GaugeInfo, Gauge>(gauges);
+			this.data = new LinkedHashMap<String, String>(data);
+		}
+
+		@Override
+		public Void call() throws Exception {
 			// Load the source frame
-			BufferedImage image = ImageIO.read(new File(String.format(framesSrcPath, frame)));
+			BufferedImage image = ImageIO.read(new File(inFilename));
 			// Draw data over the source frame
-			Graphics2D graphics = (Graphics2D) image.getGraphics();
-			for(Map.Entry<GaugeInfo, Gauge> entry : gauges.entrySet()) {
-				GaugeInfo info = entry.getKey();
-				graphics.setClip(
-						info.getX(),
-						info.getY(),
-						info.getWidth() + 1,
-						info.getHeight() + 1
-						);
-				entry.getValue().draw(
-						data,
-						graphics,
-						info.getX(),
-						info.getY(),
-						info.getWidth(),
-						info.getHeight()
-						);
-			}
+			drawFrame(gauges, data, image);
 			// Save the new file
-			ImageIO.write(image, "png", new File(String.format(framesDestPath, frame)));
+			ImageIO.write(image, "png", new File(outFilename));
+
+			return null;
+		}
+	}
+
+	private static void drawFrame(Map<GaugeInfo, Gauge> gauges, Map<String, String> data, BufferedImage image) {
+		Graphics2D graphics = (Graphics2D) image.getGraphics();
+		for(Map.Entry<GaugeInfo, Gauge> entry : gauges.entrySet()) {
+			GaugeInfo info = entry.getKey();
+			graphics.setClip(
+					info.getX(),
+					info.getY(),
+					info.getWidth() + 1,
+					info.getHeight() + 1
+					);
+			entry.getValue().draw(
+					data,
+					graphics,
+					info.getX(),
+					info.getY(),
+					info.getWidth(),
+					info.getHeight()
+					);
 		}
 	}
 

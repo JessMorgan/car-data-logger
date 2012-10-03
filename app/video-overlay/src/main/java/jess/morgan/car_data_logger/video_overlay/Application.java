@@ -59,7 +59,7 @@ public class Application {
 		// Count frames
 		String framesSrcPath  = config.getVideoFramesSrcPath();
 		String framesDestPath = config.getVideoFramesDestPath();
-		int frameCount = 0;
+		int frameCount = 1;
 		while(new File(String.format(framesSrcPath, frameCount)).isFile()) {
 			frameCount++;
 		};

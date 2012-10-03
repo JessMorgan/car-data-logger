@@ -1,6 +1,12 @@
 package jess.morgan.car_data_logger.video_overlay;
 
+import java.awt.Color;
+import java.awt.Composite;
+import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.Paint;
+import java.awt.Stroke;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
@@ -160,7 +166,24 @@ public class Application {
 
 	private static void drawFrame(Map<GaugeInfo, Gauge> gauges, Map<String, String> data, BufferedImage image) {
 		Graphics2D graphics = (Graphics2D) image.getGraphics();
+
+		Color           oldBackgroundColor = graphics.getBackground();
+		Color           oldColor           = graphics.getColor();
+		Composite       oldComposite       = graphics.getComposite();
+		Font            oldFont            = graphics.getFont();
+		Paint           oldPaint           = graphics.getPaint();
+		Stroke          oldStroke          = graphics.getStroke();
+		AffineTransform oldTransform       = graphics.getTransform();
+
 		for(Map.Entry<GaugeInfo, Gauge> entry : gauges.entrySet()) {
+			graphics.setBackground(oldBackgroundColor);
+			graphics.setColor(oldColor);
+			graphics.setComposite(oldComposite);
+			graphics.setFont(oldFont);
+			graphics.setPaint(oldPaint);
+			graphics.setStroke(oldStroke);
+			graphics.setTransform(oldTransform);
+
 			GaugeInfo info = entry.getKey();
 			graphics.setClip(
 					info.getX(),

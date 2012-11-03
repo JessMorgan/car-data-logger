@@ -1,4 +1,5 @@
 [ ] Proper CLI for decode-app
+[ ]   Maven goals for each app?
 [ ] GUI for decode-app
 [ ] Progress bars for decode-app GUI
 [ ]   Line number callback for decoder
@@ -18,12 +19,13 @@
 [ ]   Track image creator
 [ ]   Data visualizer (output data on series of transparent pngs, for video overlay)
 [ ]     Use multiple cpu cores for speedup?
+[ ]     Use video card for speedup?  Look into rootbeer project (http://chirrup.org/rootbeer/ / https://github.com/pcpratts/rootbeer1/)
 [ ]     Gauges:
 [ ]       Bar Gauge
 [X]         Basic functionality
 [ ]         Labels
 [ ]         SVG frame?
             * Should SVG frame be in a base gauge class, so its functionality is available to all gauges?
-[ ]       RX-8 Style Speedometer/Tachometer
+[/]       RX-8 Style Speedometer/Tachometer
 [ ]       Threshold Image (E-Brake Light)
 [ ]       Rotated Image (Steering Wheel)

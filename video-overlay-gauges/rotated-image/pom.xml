@@ -1,5 +1,5 @@
 <!--
-Copyright 2011 Jess Morgan
+Copyright 2012 Jess Morgan
 
 This file is part of car-data-logger.
 
@@ -22,19 +22,19 @@ along with car-data-logger.  If not, see <http://www.gnu.org/licenses/>.
 		<groupId>jess.morgan.car-data-logger</groupId>
 		<artifactId>parent</artifactId>
 		<version>1</version>
-		<relativePath>../parent</relativePath>
+		<relativePath>../../parent</relativePath>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>jess.morgan.car-data-logger</groupId>
-	<artifactId>video-overlay-gauges</artifactId>
+	<artifactId>video-overlay-rotated-image-gauge</artifactId>
 	<version>0.1.0-SNAPSHOT</version>
-	<packaging>pom</packaging>
-	<name>Video Overlay Gauges</name>
-	<description>Gauges for use on video data overlays</description>
-	<modules>
-		<module>video-overlay-gauge-api</module>
-		<module>bar-gauge</module>
-		<module>rotated-image</module>
-		<module>rx8-speedo-tach</module>
-	</modules>
+	<name>Rotated Image Gauge</name>
+	<description>Gauge to show one-dimensional data as a rotating image</description>
+	<dependencies>
+		<dependency>
+			<groupId>jess.morgan.car-data-logger</groupId>
+			<artifactId>video-overlay-gauge-api</artifactId>
+			<version>0.1.0-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
 </project>

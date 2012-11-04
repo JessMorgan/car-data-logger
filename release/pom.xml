@@ -49,6 +49,7 @@ along with car-data-logger.  If not, see <http://www.gnu.org/licenses/>.
 		<video.overlay.version>0.1.0-SNAPSHOT</video.overlay.version>
 		<video.overlay.gauge.api.version>0.1.0-SNAPSHOT</video.overlay.gauge.api.version>
 		<video.overlay.bar.gauge.version>0.1.0-SNAPSHOT</video.overlay.bar.gauge.version>
+		<video.overlay.rotated_image.gauge.version>0.1.0-SNAPSHOT</video.overlay.rotated_image.gauge.version>
 	</properties>
 	<build>
 		<plugins>
@@ -131,6 +132,12 @@ along with car-data-logger.  If not, see <http://www.gnu.org/licenses/>.
 									<groupId>jess.morgan.car-data-logger</groupId>
 									<artifactId>rx8-speedo-tach</artifactId>
 									<version>${rx8.speedo.tach.version}</version>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${plugin.dir}</outputDirectory>
+									<groupId>jess.morgan.car-data-logger</groupId>
+									<artifactId>video-overlay-rotated-image-gauge</artifactId>
+									<version>${video.overlay.rotated_image.gauge.version}</version>
 								</artifactItem>
 								<artifactItem>
 									<outputDirectory>${plugin.dir}</outputDirectory>

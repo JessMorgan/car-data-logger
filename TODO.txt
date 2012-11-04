@@ -27,5 +27,5 @@
 [ ]         SVG frame?
             * Should SVG frame be in a base gauge class, so its functionality is available to all gauges?
 [/]       RX-8 Style Speedometer/Tachometer
-[ ]       Threshold Image (E-Brake Light)
+[X]       Threshold Image (E-Brake Light)
 [X]       Rotated Image (Steering Wheel)

@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Panel;
+import java.awt.font.TextLayout;
+import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -125,10 +127,24 @@ public class RX8SpeedoTach implements Gauge {
 			graphics.drawLine(x1, y1, x2, y2);
 		}
 		// Draw numbers
+		graphics.setColor(TEXT_COLOR);
+		for(int rpm = 0; rpm <= maxRpm; rpm += 1000) {
+			double angle = degreesToRadians(calculateRpmAngle(rpm));
+			int x1 = (int)(x + width  / 2.0 + Math.cos(angle) * (width  / 2 - gaugeBufferWidth - gaugeLongPipLength));
+			int y1 = (int)(y + height / 2.0 + Math.sin(angle) * (height / 2 - gaugeBufferWidth - gaugeLongPipLength));
+			TextLayout layout = new TextLayout(Integer.toString(rpm / 1000), graphics.getFont(), graphics.getFontRenderContext());
+			Rectangle2D bounds = layout.getPixelBounds(null, x1, y1);
+			// Center
+			x1 -= bounds.getWidth() / 2;
+			y1 += bounds.getHeight() / 2;
+			// Move toward the interior as needed
+			x1 -= Math.cos(angle) * bounds.getWidth();
+			y1 -= Math.sin(angle) * bounds.getHeight();
+			layout.draw(graphics, x1, y1);
+		}
 		// Draw "x1000r/min" label
 		// Draw "mph" unit label
 		// Draw digital speedometer
-		graphics.setColor(TEXT_COLOR);
 		graphics.drawString(String.format("%.0f", speedValue), x + (width * 3 / 4), y + (height * 3 / 4));
 		// Draw tachometer needle
 		graphics.setColor(NEEDLE_COLOR);

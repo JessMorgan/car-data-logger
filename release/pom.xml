@@ -42,6 +42,7 @@ along with car-data-logger.  If not, see <http://www.gnu.org/licenses/>.
 		<decode.app.version>0.1.0-SNAPSHOT</decode.app.version>
 		<decode.api.version>0.1.0-SNAPSHOT</decode.api.version>
 		<decode.can.version>0.1.0-SNAPSHOT</decode.can.version>
+		<decode.gps.version>0.1.0-SNAPSHOT</decode.gps.version>
 		<interpolate.last.value.version>0.1.0-SNAPSHOT</interpolate.last.value.version>
 		<interpolate.linear.version>0.1.0-SNAPSHOT</interpolate.linear.version>
 		<plugin.version>0.1.0-SNAPSHOT</plugin.version>
@@ -115,6 +116,12 @@ along with car-data-logger.  If not, see <http://www.gnu.org/licenses/>.
 									<groupId>jess.morgan.car-data-logger</groupId>
 									<artifactId>decode-can</artifactId>
 									<version>${decode.can.version}</version>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${plugin.dir}</outputDirectory>
+									<groupId>jess.morgan.car-data-logger</groupId>
+									<artifactId>decode-gps</artifactId>
+									<version>${decode.gps.version}</version>
 								</artifactItem>
 								<artifactItem>
 									<outputDirectory>${plugin.dir}</outputDirectory>

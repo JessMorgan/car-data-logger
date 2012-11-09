@@ -22,18 +22,30 @@ along with car-data-logger.  If not, see <http://www.gnu.org/licenses/>.
 		<groupId>jess.morgan.car-data-logger</groupId>
 		<artifactId>parent</artifactId>
 		<version>1</version>
-		<relativePath>../parent</relativePath>
+		<relativePath>../../parent</relativePath>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>jess.morgan.car-data-logger</groupId>
-	<artifactId>decode</artifactId>
+	<artifactId>decode-gps</artifactId>
 	<version>0.1.0-SNAPSHOT</version>
-	<packaging>pom</packaging>
-	<name>Decode</name>
-	<description>Extracts all useful data from track logs</description>
-	<modules>
-		<module>decode-api</module>
-		<module>decode-can</module>
-		<module>decode-gps</module>
-	</modules>
+	<name>Decode GPS</name>
+	<description>Interprets NMEA-formatted data from a GPS receiver</description>
+	<dependencies>
+		<dependency>
+			<groupId>jess.morgan.car-data-logger</groupId>
+			<artifactId>decode-api</artifactId>
+			<version>0.1.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>jess.morgan.car-data-logger</groupId>
+			<artifactId>plugin</artifactId>
+			<version>0.1.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.9</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
 </project>

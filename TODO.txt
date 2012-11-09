@@ -9,14 +9,18 @@
 [ ] Create new data processors:
 [ ]   Accelerometer (convert to Gs)
 [ ]   Empty field removal
-[ ]   GPS Lap Counter (also adds lap time) - parameters: lat/long for both ends of finish line
+[ ]   GPS Lap Counter (also adds lap time) - parameters: lat/long for both ends of finish line, or track file
+[ ]   Unit conversion?  (GPS meters altitude to feet, allow user configurable conversions matching on unit, with JavaScript calculation like CAN decoder)
 
 [ ] Create new decoders:
 [ ]   Accelerometer / Gyro
-[ ]   GPS
+[X]   GPS
 
 [ ] New apps:
-[ ]   Track image creator
+[/]   Track image creator
+[ ]     Add finish line
+[ ]     Add preferred rotation
+[ ]     Read from config file
 [ ]   Data visualizer (output data on series of transparent pngs, for video overlay)
 [ ]     Use multiple cpu cores for speedup?
 [ ]     Use video card for speedup?  Look into rootbeer project (http://chirrup.org/rootbeer/ / https://github.com/pcpratts/rootbeer1/)
@@ -29,3 +33,9 @@
 [/]       RX-8 Style Speedometer/Tachometer
 [X]       Threshold Image (E-Brake Light)
 [X]       Rotated Image (Steering Wheel)
+[ ]       Text (current lap, lap time, etc)
+[ ]       GPS Map
+[ ]         configure track
+[ ]         configure opacity
+[ ]         default to correct aspect ratio (but allow override)
+[ ]         auto select track based on latitude/longitude?

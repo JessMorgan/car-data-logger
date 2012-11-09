@@ -55,8 +55,16 @@ public class LinearInterpolator implements DataProcessor {
 					}
 				}
 
-				double firstValue = Double.parseDouble(min.getValue());
-				double lastValue = Double.parseDouble(max.getValue());
+				double firstValue;
+				double lastValue;
+				try {
+					firstValue = Double.parseDouble(min.getValue());
+					lastValue = Double.parseDouble(max.getValue());
+				} catch(NumberFormatException nfe) {
+					// Guess we don't understand this data format - we'll just reuse the last value
+					line.put(field,  min.getValue());
+					continue;
+				}
 				double valueDifference = lastValue - firstValue;
 				long minMaxTimeDifference = max.getKey() - min.getKey();
 				long minCurrentTimeDifference = timestamp - min.getKey();

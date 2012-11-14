@@ -29,6 +29,8 @@ import jess.morgan.car_data_logger.decode.AbstractDataDecoder;
 public class GPSDataDecoder extends AbstractDataDecoder {
 	private static final Pattern PATTERN = Pattern.compile("^\\[\\d+\\] \\$GP([A-Z]{3}),(.*)$");
 
+	private String positionSource = null;
+
 	public Map<String, String> getAvailableParameters() {
 		Map<String, String> parameters = new LinkedHashMap<String, String>();
 		parameters.put("Latitude", "*");
@@ -66,8 +68,13 @@ public class GPSDataDecoder extends AbstractDataDecoder {
 	private Map<String, String> decodeGGA(String[] data) {
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("Time",      decodeTime(      data[0]));
-		map.put("Latitude",  decodeCoordinate(data[1], data[2]));
-		map.put("Longitude", decodeCoordinate(data[3], data[4]));
+		if(positionSource == null && null != decodeCoordinate(data[1], data[2])) {
+			positionSource = "GGA";
+		}
+		if("GGA".equals(positionSource)) {
+			map.put("Latitude",  decodeCoordinate(data[1], data[2]));
+			map.put("Longitude", decodeCoordinate(data[3], data[4]));
+		}
 		map.put("Altitude",                   data[8]);
 		return map;
 	}
@@ -79,8 +86,13 @@ public class GPSDataDecoder extends AbstractDataDecoder {
 			return map;
 		}
 		map.put("Time",      decodeTime(      data[0]));
-		map.put("Latitude",  decodeCoordinate(data[2], data[3]));
-		map.put("Longitude", decodeCoordinate(data[4], data[5]));
+		if(positionSource == null && null != decodeCoordinate(data[2], data[3])) {
+			positionSource = "RMC";
+		}
+		if("RMC".equals(positionSource)) {
+			map.put("Latitude",  decodeCoordinate(data[2], data[3]));
+			map.put("Longitude", decodeCoordinate(data[4], data[5]));
+		}
 		try {
 			double speedKnots = Double.parseDouble(data[6]);
 			map.put("GPS Speed", Double.toString(speedKnots * 1.15078));

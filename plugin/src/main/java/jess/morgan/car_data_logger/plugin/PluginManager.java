@@ -1,5 +1,6 @@
 package jess.morgan.car_data_logger.plugin;
 
+import java.awt.Color;
 import java.io.File;
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -56,6 +57,8 @@ public class PluginManager {
 			return Double.parseDouble(value);
 		} else if(BigDecimal.class.equals(type)) {
 			return new BigDecimal(value);
+		} else if(Color.class.equals(type)) {
+			return Color.decode(value);
 		}
 		return value;
 	}

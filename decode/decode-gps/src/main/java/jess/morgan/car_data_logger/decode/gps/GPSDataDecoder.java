@@ -31,6 +31,7 @@ public class GPSDataDecoder extends AbstractDataDecoder {
 	private static final Pattern PATTERN = Pattern.compile("^\\[\\d+\\] \\$GP([A-Z]{3}),(.*)$");
 
 	private String positionSource = null;
+	private String timeSource = null;
 
 	public Map<String, String> getAvailableParameters() {
 		Map<String, String> parameters = new LinkedHashMap<String, String>();
@@ -68,9 +69,14 @@ public class GPSDataDecoder extends AbstractDataDecoder {
 
 	private Map<String, String> decodeGGA(String[] data) {
 		Map<String, String> map = new HashMap<String, String>();
-		map.put("Time",      decodeTime(      data[0]));
 		if(positionSource == null && null != decodeCoordinate(data[1], data[2])) {
 			positionSource = "GGA";
+		}
+		if(timeSource == null && null != decodeTime(data[0])) {
+			timeSource = "GGA";
+		}
+		if("GGA".equals(timeSource)) {
+			map.put("Time",      decodeTime(      data[0]));
 		}
 		if("GGA".equals(positionSource)) {
 			map.put("Latitude",  decodeCoordinate(data[1], data[2]));
@@ -86,11 +92,17 @@ public class GPSDataDecoder extends AbstractDataDecoder {
 			// Invalid - skip
 			return map;
 		}
-		map.put("Time",      decodeTime(      data[0]));
 		if(positionSource == null && null != decodeCoordinate(data[2], data[3])) {
 			positionSource = "RMC";
 		}
+		if(timeSource == null && null != decodeTime(data[0])) {
+			timeSource = "RMC";
+		}
+		if("RMC".equals(timeSource)) {
+			map.put("Time",      decodeTime(      data[0]));
+		}
 		if("RMC".equals(positionSource)) {
+			map.put("Time",      decodeTime(      data[0]));
 			map.put("Latitude",  decodeCoordinate(data[2], data[3]));
 			map.put("Longitude", decodeCoordinate(data[4], data[5]));
 		}
@@ -107,7 +119,12 @@ public class GPSDataDecoder extends AbstractDataDecoder {
 
 	private Map<String, String> decodeZDA(String[] data) {
 		Map<String, String> map = new HashMap<String, String>();
-		map.put("Time",      decodeTime(      data[0]));
+		if(timeSource == null && null != decodeTime(data[0])) {
+			timeSource = "ZDA";
+		}
+		if("ZDA".equals(timeSource)) {
+			map.put("Time",      decodeTime(      data[0]));
+		}
 		map.put("Date",      String.format("%s-%s-%s", data[3], data[2], data[1]));
 		if(!data[4].isEmpty()) {
 			map.put("Time Zone", String.format("%s:%s", data[4], data[5]));

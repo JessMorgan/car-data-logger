@@ -29,6 +29,8 @@ public interface DataDecoder {
 	 * @return the parameters this data decoder can return, with parameter name as key and unit as value
 	 */
 	public Map<String, String> getAvailableParameters();
+	public void addParameter(String paramName, String paramUnit);
+	public void addParameters(Map<String, String> params);
 	public void decodeStream(InputStream is, OutputStream os) throws IOException;
 	public List<Map<String, String>> decodeStream(InputStream is) throws IOException;
 	public void writeData(List<Map<String, String>> data, OutputStream os);

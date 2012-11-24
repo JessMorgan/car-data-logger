@@ -1,5 +1,6 @@
 package jess.morgan.car_data_logger.interpolate;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -70,5 +71,10 @@ public class LinearInterpolator implements DataProcessor {
 				line.put(field, Double.toString(newValue));
 			}
 		}
+	}
+
+	@Override
+	public Map<String, String> getAdditionalParameters() {
+		return Collections.emptyMap();
 	}
 }

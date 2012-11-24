@@ -1,5 +1,6 @@
 package jess.morgan.car_data_logger.interpolate;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,5 +28,10 @@ public class LastValueInterpolator implements DataProcessor {
 				}
 			}
 		}
+	}
+
+	@Override
+	public Map<String, String> getAdditionalParameters() {
+		return Collections.emptyMap();
 	}
 }

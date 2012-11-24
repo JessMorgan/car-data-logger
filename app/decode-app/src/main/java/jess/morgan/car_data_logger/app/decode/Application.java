@@ -67,6 +67,7 @@ public class Application {
 		List<Map<String, String>> data = decoder.decodeStream(new FileInputStream(inFile));
 		for(DataProcessor dataProcessor : dataProcessors) {
 			dataProcessor.process(data);
+			decoder.addParameters(dataProcessor.getAdditionalParameters());
 		}
 		decoder.writeData(data, new FileOutputStream(outFile));
 	}

@@ -137,4 +137,12 @@ public abstract class AbstractDataDecoder implements DataDecoder {
 			}
 		}
 	}
+
+	public void addParameter(String paramName, String paramUnit) {
+		// Null implementation (optional override)
+	}
+
+	public void addParameters(Map<String, String> params) {
+		// Null implementation (optional override)
+	}
 }

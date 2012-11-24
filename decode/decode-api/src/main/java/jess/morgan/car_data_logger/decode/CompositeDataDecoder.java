@@ -25,6 +25,7 @@ import java.util.Map;
 
 public class CompositeDataDecoder extends AbstractDataDecoder {
 	private final List<DataDecoder> decoders;
+	private final Map<String, String> additionalParameters = new LinkedHashMap<String, String>();
 
 	public CompositeDataDecoder(DataDecoder... decoders) {
 		this(Arrays.asList(decoders));
@@ -38,6 +39,7 @@ public class CompositeDataDecoder extends AbstractDataDecoder {
 		for(DataDecoder decoder : decoders) {
 			parameters.putAll(decoder.getAvailableParameters());
 		}
+		parameters.putAll(additionalParameters);
 		return parameters;
 	}
 
@@ -51,5 +53,13 @@ public class CompositeDataDecoder extends AbstractDataDecoder {
 			}
 		}
 		return data;
+	}
+
+	public void addParameter(String paramName, String paramUnit) {
+		additionalParameters.put(paramName, paramUnit);
+	}
+
+	public void addParameters(Map<String, String> params) {
+		additionalParameters.putAll(params);
 	}
 }

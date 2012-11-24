@@ -220,7 +220,8 @@ public class Application {
 		}
 		Map<String, String> data = new HashMap<String, String>();
 		String[] values = line.split(",");
-		for(int i = 0; i < values.length; i++) {
+		int length = Math.min(values.length, paramNames.length);
+		for(int i = 0; i < length; i++) {
 			data.put(paramNames[i], values[i]);
 		}
 		return data;

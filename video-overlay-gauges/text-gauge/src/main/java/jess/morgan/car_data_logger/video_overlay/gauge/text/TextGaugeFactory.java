@@ -39,6 +39,8 @@ public class TextGaugeFactory implements GaugeFactory {
 		return new ConfigParameter[]{
 				new ConfigParameter("parameter",        "Parameter Name",                  String.class,  true),
 				new ConfigParameter("format",           "printf format",                   String.class,  false),
+				new ConfigParameter("timeFormat",       "format for time value",           String.class,  false),
+				new ConfigParameter("emptyValue",       "Value to display for empty/null", String.class,  false),
 				new ConfigParameter("textColor",        "Text Color",                      Color.class,   false),
 		};
 	}
@@ -47,8 +49,10 @@ public class TextGaugeFactory implements GaugeFactory {
 	public Gauge getPlugin(Map<String, Object> config) throws Exception {
 		String parameterName    = ConfigParameter.getParameter(config, "parameter",      String.class,   true);
 		String format           = ConfigParameter.getParameter(config, "format",         String.class, false);
+		String timeFormat       = ConfigParameter.getParameter(config, "timeFormat",     String.class, false);
+		String emptyValue       = ConfigParameter.getParameter(config, "emptyValue",     String.class, false);
 		Color textColor         = ConfigParameter.getParameter(config, "textColor",      Color.class,  false);
 
-		return new TextGauge(parameterName, format, textColor);
+		return new TextGauge(parameterName, format, timeFormat, emptyValue, textColor);
 	}
 }

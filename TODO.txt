@@ -33,9 +33,13 @@
 [/]       RX-8 Style Speedometer/Tachometer
 [X]       Threshold Image (E-Brake Light)
 [X]       Rotated Image (Steering Wheel)
-[ ]       Text (current lap, lap time, etc)
-[ ]       GPS Map
-[ ]         configure track
-[ ]         configure opacity
-[ ]         default to correct aspect ratio (but allow override)
+[/]       Text (current lap, lap time, etc)
+[X]         timeFormat config param for handling time display from milliseconds
+[X]         emptyValueDisplay (to show "-" for empty values for lap counter, times, etc)
+[ ]         font and size selection
+[ ]         anti-aliasing
+[/]       GPS Map
+[/]         configure track
+[X]         configure opacity
+[/]         default to correct aspect ratio (but allow override)
 [ ]         auto select track based on latitude/longitude?

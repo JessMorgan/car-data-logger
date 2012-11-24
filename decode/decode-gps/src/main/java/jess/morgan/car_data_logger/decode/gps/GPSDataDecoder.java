@@ -18,6 +18,7 @@
  */
 package jess.morgan.car_data_logger.decode.gps;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -39,7 +40,7 @@ public class GPSDataDecoder extends AbstractDataDecoder {
 		parameters.put("GPS Speed", "MPH");
 		parameters.put("GPS Course", "*");
 		parameters.put("Date", "UTC");
-		parameters.put("Time", "UTC");
+		parameters.put("Time", "milliseconds (UTC)");
 		parameters.put("Time Zone", "");
 		return parameters;
 	}
@@ -121,14 +122,15 @@ public class GPSDataDecoder extends AbstractDataDecoder {
 			return "";
 		}
 
-		StringBuilder sb = new StringBuilder();
-		sb.append(m.group(1))
-			.append(':').append(m.group(2))
-			.append(':').append(m.group(3));
+		Calendar cal = Calendar.getInstance();
+		cal.setTimeInMillis(0);
+		cal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(m.group(1)));
+		cal.set(Calendar.MINUTE,      Integer.parseInt(m.group(2)));
+		cal.set(Calendar.SECOND,      Integer.parseInt(m.group(3)));
 		if(m.groupCount() == 4 && m.group(4) != null) {
-			sb.append('.').append(m.group(4));
+			cal.set(Calendar.MILLISECOND,      Integer.parseInt(m.group(4)));
 		}
-		return sb.toString();
+		return Long.toString(cal.getTimeInMillis());
 	}
 
 	private String decodeCoordinate(String string, String string2) {

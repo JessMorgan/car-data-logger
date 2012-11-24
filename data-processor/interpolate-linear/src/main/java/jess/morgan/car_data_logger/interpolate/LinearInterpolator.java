@@ -8,9 +8,6 @@ import java.util.TreeMap;
 
 import jess.morgan.car_data_logger.data_processor.DataProcessor;
 
-import net.xeoh.plugins.base.annotations.PluginImplementation;
-
-@PluginImplementation
 public class LinearInterpolator implements DataProcessor {
 	@Override
 	public void process(List<Map<String, String>> data) {

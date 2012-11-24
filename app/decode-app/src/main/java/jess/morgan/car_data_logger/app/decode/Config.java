@@ -166,4 +166,20 @@ public class Config {
 	public void setDataProcessors(List<String> dataProcessors) {
 		this.dataProcessors = dataProcessors;
 	}
+
+	public Map<String, String> getDataProcessorConfig(String dataProcessor) {
+		Map<String, String> config = dataProcessorConfig.get(dataProcessor);
+		if(config == null) {
+			return new  HashMap<String, String>();
+		}
+		return Collections.unmodifiableMap(config);
+	}
+
+	public void setDataProcessorConfig(String dataProcessor, Map<String, String> dataProcessorConfig) {
+		if(dataProcessorConfig == null) {
+			this.dataProcessorConfig.remove(dataProcessor);
+		} else {
+			this.dataProcessorConfig.put(dataProcessor, new HashMap<String, String>(dataProcessorConfig));
+		}
+	}
 }

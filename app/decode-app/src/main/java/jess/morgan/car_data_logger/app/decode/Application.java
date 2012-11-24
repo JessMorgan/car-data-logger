@@ -48,7 +48,7 @@ public class Application {
 			try {
 				DataProcessor dataProcessor = pluginManager.loadPlugin(
 						dataProcessorClassName,
-						config.getDecoderConfig(dataProcessorClassName),
+						config.getDataProcessorConfig(dataProcessorClassName),
 						DataProcessorFactory.class
 						);
 				if(dataProcessor == null) {

@@ -9,8 +9,9 @@
 [ ] Create new data processors:
 [ ]   Accelerometer (convert to Gs)
 [ ]   Empty field removal
-[ ]   GPS Lap Counter (also adds lap time) - parameters: lat/long for both ends of finish line, or track file
+[X]   GPS Lap Counter (also adds lap time) - parameters: lat/long for both ends of finish line, or track file
 [ ]   Unit conversion?  (GPS meters altitude to feet, allow user configurable conversions matching on unit, with JavaScript calculation like CAN decoder)
+[ ]   Create AbstractDataProcessor to handle proper null implementation of getAdditionalParameters
 
 [ ] Create new decoders:
 [ ]   Accelerometer / Gyro
@@ -22,7 +23,9 @@
 [ ]     Add preferred rotation
 [ ]     Read from config file
 [ ]   Data visualizer (output data on series of transparent pngs, for video overlay)
-[ ]     Use multiple cpu cores for speedup?
+[X]     Use multiple cpu cores for speedup
+[ ]       Allow thread number to be configurable (with an autodetect option as default)
+[ ]         Can we autodetect hyperthreading, so a dual-core cpu with hyperthreading will give 2 threads, not 4?  Look into performance implications.
 [ ]     Use video card for speedup?  Look into rootbeer project (http://chirrup.org/rootbeer/ / https://github.com/pcpratts/rootbeer1/)
 [ ]     Gauges:
 [ ]       Bar Gauge

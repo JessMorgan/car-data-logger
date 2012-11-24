@@ -45,6 +45,7 @@ along with car-data-logger.  If not, see <http://www.gnu.org/licenses/>.
 		<decode.gps.version>0.1.0-SNAPSHOT</decode.gps.version>
 		<interpolate.last.value.version>0.1.0-SNAPSHOT</interpolate.last.value.version>
 		<interpolate.linear.version>0.1.0-SNAPSHOT</interpolate.linear.version>
+		<gps.lap.timer.version>0.1.0-SNAPSHOT</gps.lap.timer.version>
 		<plugin.version>0.1.0-SNAPSHOT</plugin.version>
 		<rx8.speedo.tach.version>0.1.0-SNAPSHOT</rx8.speedo.tach.version>
 		<video.overlay.version>0.1.0-SNAPSHOT</video.overlay.version>
@@ -136,6 +137,12 @@ along with car-data-logger.  If not, see <http://www.gnu.org/licenses/>.
 									<groupId>jess.morgan.car-data-logger</groupId>
 									<artifactId>interpolate-linear</artifactId>
 									<version>${interpolate.linear.version}</version>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${plugin.dir}</outputDirectory>
+									<groupId>jess.morgan.car-data-logger</groupId>
+									<artifactId>gps-lap-timer</artifactId>
+									<version>${gps.lap.timer.version}</version>
 								</artifactItem>
 								<artifactItem>
 									<outputDirectory>${plugin.dir}</outputDirectory>

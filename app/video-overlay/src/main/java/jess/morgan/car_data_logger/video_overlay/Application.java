@@ -68,15 +68,19 @@ public class Application {
 		long lastTimestamp = 0;
 		if(rescale) {
 			BufferedReader br = new BufferedReader(new FileReader(inFile));
-			String[] paramNames = br.readLine().split(",");
-			String line = br.readLine();
-			Map<String, String> data = parseLine(line, paramNames);
-			String lastLine = line;
-			while(null != (line = br.readLine())) {
-				lastLine = line;
+			try {
+				String[] paramNames = br.readLine().split(",");
+				String line = br.readLine();
+				Map<String, String> data = parseLine(line, paramNames);
+				String lastLine = line;
+				while(null != (line = br.readLine())) {
+					lastLine = line;
+				}
+				data = parseLine(lastLine, paramNames);
+				lastTimestamp = Long.parseLong(data.get("Timestamp"));
+			} finally {
+				br.close();
 			}
-			data = parseLine(lastLine, paramNames);
-			lastTimestamp = Long.parseLong(data.get("Timestamp"));
 		}
 
 		// Open data file and read headers

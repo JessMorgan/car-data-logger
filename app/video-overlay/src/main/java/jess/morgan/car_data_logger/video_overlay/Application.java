@@ -62,6 +62,8 @@ public class Application {
 			frameCount++;
 		}
 
+		Statistics stats = (config.getStatDisplayFrequency() > 0) ? new Statistics(frameCount, config.getStatDisplayFrequency()) : null;
+
 		boolean rescale = config.isRescaleDataToVideo();
 		long lastTimestamp = 0;
 		if(rescale) {
@@ -125,7 +127,8 @@ public class Application {
 							String.format(framesDestPath, frame),
 							config.getImageOutputFormat(),
 							gauges,
-							data));
+							data,
+							stats));
 		}
 		executor.shutdown();
 		try {
@@ -133,11 +136,45 @@ public class Application {
 			do {
 				keepWaiting = !executor.awaitTermination(1, TimeUnit.MINUTES);
 				if(keepWaiting) {
-					System.out.println("Still waiting for execution to complete...");
+					if(config.getStatDisplayFrequency() <= 0) {
+						System.out.println("Still waiting for execution to complete...");
+					}
 				}
 			} while(keepWaiting);
 		} catch (InterruptedException e) {
 			System.err.println("Interrupted - exiting");
+		}
+	}
+
+	private static class Statistics {
+		private final int frameCount;
+		private final int displayFrequency;
+		private int framesReturned = 0;
+		private long totalTime = 0;
+		private long minTime = Long.MAX_VALUE;
+		private long maxTime = Long.MIN_VALUE;
+
+		public Statistics(int frameCount, int displayFrequency) {
+			this.frameCount = frameCount;
+			this.displayFrequency = displayFrequency;
+		}
+
+		public synchronized void addStatistic(long milliseconds) {
+			framesReturned ++;
+			totalTime += milliseconds;
+			if(milliseconds > maxTime) {
+				maxTime = milliseconds;
+			}
+			if(milliseconds < minTime) {
+				minTime = milliseconds;
+			}
+			if(displayFrequency > 0 && (framesReturned % displayFrequency) == 0) {
+				System.out.println(toString());
+			}
+		}
+
+		public String toString() {
+			return String.format("Frames complete: %d / %d, avg: %d, min: %d, max: %d", framesReturned, frameCount, totalTime / framesReturned, minTime, maxTime);
 		}
 	}
 
@@ -147,17 +184,21 @@ public class Application {
 		private final String imageFormat;
 		private final Map<GaugeInfo, Gauge> gauges;
 		private final Map<String, String> data;
+		private final Statistics stats;
 
-		public DrawFrameThread(String inFilename, String outFilename, String imageFormat, Map<GaugeInfo, Gauge> gauges, Map<String, String> data) {
+		public DrawFrameThread(String inFilename, String outFilename, String imageFormat, Map<GaugeInfo, Gauge> gauges, Map<String, String> data, Statistics stats) {
 			this.inFilename = inFilename;
 			this.outFilename = outFilename;
 			this.imageFormat = imageFormat;
 			this.gauges = new LinkedHashMap<GaugeInfo, Gauge>(gauges);
 			this.data = new LinkedHashMap<String, String>(data);
+			this.stats = stats;
 		}
 
 		@Override
 		public Void call() throws Exception {
+			long startTime = System.currentTimeMillis();
+
 			// Load the source frame
 			BufferedImage image = ImageIO.read(new File(inFilename));
 			// Draw data over the source frame
@@ -165,6 +206,9 @@ public class Application {
 			// Save the new file
 			ImageIO.write(image, imageFormat, new File(outFilename));
 
+			if(stats != null) {
+				stats.addStatistic(System.currentTimeMillis() - startTime);
+			}
 			return null;
 		}
 	}

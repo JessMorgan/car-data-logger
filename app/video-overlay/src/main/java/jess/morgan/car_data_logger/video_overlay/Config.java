@@ -21,6 +21,7 @@ public class Config {
 	private BigDecimal videoOffsetSeconds;
 	private String imageOutputFormat;
 	private int threads;
+	private int statDisplayFrequency;
 	private List<GaugeInfo> gauges;
 	private boolean rescaleDataToVideo;
 
@@ -57,6 +58,7 @@ public class Config {
 		rescaleDataToVideo  = Boolean.parseBoolean(properties.getProperty("video.rescale.data", "false"));
 		imageOutputFormat   = properties.getProperty("video.frames.dest.format", "jpg");
 		threads             = Integer.parseInt(properties.getProperty("threads", "2"));
+		statDisplayFrequency= Integer.parseInt(properties.getProperty("stat.display.frequency", "0"));
 
 		gauges = new ArrayList<GaugeInfo>();
 		for(int i = 1; ; i++) {
@@ -160,6 +162,14 @@ public class Config {
 
 	public void setThreads(int threads) {
 		this.threads = threads;
+	}
+
+	public int getStatDisplayFrequency() {
+		return statDisplayFrequency;
+	}
+
+	public void setStatDisplayFrequency(int statDisplayFrequency) {
+		this.statDisplayFrequency = statDisplayFrequency;
 	}
 
 	public List<GaugeInfo> getGauges() {

@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -62,7 +63,13 @@ public class Application {
 			frameCount++;
 		}
 
-		Statistics stats = (config.getStatDisplayFrequency() > 0) ? new Statistics(frameCount, config.getStatDisplayFrequency()) : null;
+		Thread statsThread = null;
+		LinkedBlockingQueue<Long> statsQueue = null;
+		if(config.getStatDisplayFrequency() > 0) {
+			statsQueue = new LinkedBlockingQueue<Long>();
+			statsThread = new Thread(new StatisticsThread(frameCount, config.getStatDisplayFrequency(), statsQueue));
+			statsThread.start();
+		}
 
 		boolean rescale = config.isRescaleDataToVideo();
 		long lastTimestamp = 0;
@@ -128,7 +135,7 @@ public class Application {
 							config.getImageOutputFormat(),
 							gauges,
 							data,
-							stats));
+							statsQueue));
 		}
 		executor.shutdown();
 		try {
@@ -143,6 +150,31 @@ public class Application {
 			} while(keepWaiting);
 		} catch (InterruptedException e) {
 			System.err.println("Interrupted - exiting");
+		}
+		if(statsThread != null && statsThread.isAlive()) {
+			statsThread.interrupt();
+		}
+	}
+
+	private static class StatisticsThread implements Runnable {
+		private final LinkedBlockingQueue<Long> queue;
+		private final Statistics stats;
+
+		public StatisticsThread(int frameCount, int statDisplayFrequency, LinkedBlockingQueue<Long> queue) {
+			this.stats = new Statistics(frameCount, statDisplayFrequency);
+			this.queue = queue;
+		}
+
+		@Override
+		public void run() {
+			while(true) {
+				try {
+					Long value = queue.take();
+					stats.addStatistic(value);
+				} catch (InterruptedException e) {
+					break;
+				}
+			}
 		}
 	}
 
@@ -159,7 +191,7 @@ public class Application {
 			this.displayFrequency = displayFrequency;
 		}
 
-		public synchronized void addStatistic(long milliseconds) {
+		public void addStatistic(long milliseconds) {
 			framesReturned ++;
 			totalTime += milliseconds;
 			if(milliseconds > maxTime) {
@@ -184,15 +216,15 @@ public class Application {
 		private final String imageFormat;
 		private final Map<GaugeInfo, Gauge> gauges;
 		private final Map<String, String> data;
-		private final Statistics stats;
+		private final LinkedBlockingQueue<Long> statsQueue;
 
-		public DrawFrameThread(String inFilename, String outFilename, String imageFormat, Map<GaugeInfo, Gauge> gauges, Map<String, String> data, Statistics stats) {
+		public DrawFrameThread(String inFilename, String outFilename, String imageFormat, Map<GaugeInfo, Gauge> gauges, Map<String, String> data, LinkedBlockingQueue<Long> statsQueue) {
 			this.inFilename = inFilename;
 			this.outFilename = outFilename;
 			this.imageFormat = imageFormat;
 			this.gauges = new LinkedHashMap<GaugeInfo, Gauge>(gauges);
 			this.data = new LinkedHashMap<String, String>(data);
-			this.stats = stats;
+			this.statsQueue = statsQueue;
 		}
 
 		@Override
@@ -206,8 +238,8 @@ public class Application {
 			// Save the new file
 			ImageIO.write(image, imageFormat, new File(outFilename));
 
-			if(stats != null) {
-				stats.addStatistic(System.currentTimeMillis() - startTime);
+			if(statsQueue != null) {
+				statsQueue.offer(System.currentTimeMillis() - startTime);
 			}
 			return null;
 		}

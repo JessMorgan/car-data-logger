@@ -19,6 +19,8 @@ public class Config {
 	private String videoFramesDestPath;
 	private BigDecimal videoFPS;
 	private BigDecimal videoOffsetSeconds;
+	private String imageOutputFormat;
+	private int threads;
 	private List<GaugeInfo> gauges;
 	private boolean rescaleDataToVideo;
 
@@ -53,6 +55,8 @@ public class Config {
 		videoFPS            = new BigDecimal(getRequiredValue(properties, "video.fps"));
 		videoOffsetSeconds  = new BigDecimal(getRequiredValue(properties, "video.offset.seconds"));
 		rescaleDataToVideo  = Boolean.parseBoolean(properties.getProperty("video.rescale.data", "false"));
+		imageOutputFormat   = properties.getProperty("video.frames.dest.format", "jpg");
+		threads             = Integer.parseInt(properties.getProperty("threads", "2"));
 
 		gauges = new ArrayList<GaugeInfo>();
 		for(int i = 1; ; i++) {
@@ -140,6 +144,22 @@ public class Config {
 
 	public void setVideoOffsetSeconds(BigDecimal videoOffsetSeconds) {
 		this.videoOffsetSeconds = videoOffsetSeconds;
+	}
+
+	public String getImageOutputFormat() {
+		return imageOutputFormat;
+	}
+
+	public void setImageOutputFormat(String imageOutputFormat) {
+		this.imageOutputFormat = imageOutputFormat;
+	}
+
+	public int getThreads() {
+		return threads;
+	}
+
+	public void setThreads(int threads) {
+		this.threads = threads;
 	}
 
 	public List<GaugeInfo> getGauges() {

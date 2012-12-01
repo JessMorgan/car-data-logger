@@ -28,8 +28,6 @@ import jess.morgan.car_data_logger.video_overlay.gauge.Gauge;
 import jess.morgan.car_data_logger.video_overlay.gauge.GaugeFactory;
 
 public class Application {
-	private static final int THREADS = 2;
-
 	public static void main(String[] args) throws IOException {
 		File inFile = new File(args[0]);
 
@@ -90,7 +88,7 @@ public class Application {
 		Map<String, String> data = parseLine(br.readLine(), paramNames);
 
 		// Create thread pool
-		ExecutorService executor = Executors.newFixedThreadPool(THREADS);
+		ExecutorService executor = Executors.newFixedThreadPool(config.getThreads());
 
 		// Loop through frames
 		long firstTimestamp = Long.parseLong(data.get("Timestamp"));
@@ -125,6 +123,7 @@ public class Application {
 					new DrawFrameThread(
 							String.format(framesSrcPath, frame),
 							String.format(framesDestPath, frame),
+							config.getImageOutputFormat(),
 							gauges,
 							data));
 		}
@@ -145,12 +144,14 @@ public class Application {
 	private static class DrawFrameThread implements Callable<Void> {
 		private final String inFilename;
 		private final String outFilename;
+		private final String imageFormat;
 		private final Map<GaugeInfo, Gauge> gauges;
 		private final Map<String, String> data;
 
-		public DrawFrameThread(String inFilename, String outFilename, Map<GaugeInfo, Gauge> gauges, Map<String, String> data) {
+		public DrawFrameThread(String inFilename, String outFilename, String imageFormat, Map<GaugeInfo, Gauge> gauges, Map<String, String> data) {
 			this.inFilename = inFilename;
 			this.outFilename = outFilename;
+			this.imageFormat = imageFormat;
 			this.gauges = new LinkedHashMap<GaugeInfo, Gauge>(gauges);
 			this.data = new LinkedHashMap<String, String>(data);
 		}
@@ -162,7 +163,7 @@ public class Application {
 			// Draw data over the source frame
 			drawFrame(gauges, data, image);
 			// Save the new file
-			ImageIO.write(image, "png", new File(outFilename));
+			ImageIO.write(image, imageFormat, new File(outFilename));
 
 			return null;
 		}

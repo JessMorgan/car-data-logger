@@ -59,10 +59,10 @@ public class Application {
 		// Count frames
 		String framesSrcPath  = config.getVideoFramesSrcPath();
 		String framesDestPath = config.getVideoFramesDestPath();
-		int frameCount = 1;
-		while(new File(String.format(framesSrcPath, frameCount)).isFile()) {
+		int frameCount = 0;
+		while(new File(String.format(framesSrcPath, frameCount + 1)).isFile()) {
 			frameCount++;
-		};
+		}
 
 		boolean rescale = config.isRescaleDataToVideo();
 		long lastTimestamp = 0;

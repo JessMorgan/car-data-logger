@@ -18,6 +18,7 @@
  */
 package jess.morgan.car_data_logger.video_overlay.gauge.gps_track;
 
+import java.awt.Color;
 import java.io.File;
 import java.util.Map;
 
@@ -39,6 +40,8 @@ public class GPSTrackGaugeFactory implements GaugeFactory {
 		return new ConfigParameter[]{
 				new ConfigParameter("track",           "Track file",                              File.class,    true),
 				new ConfigParameter("opacity",         "Opacity",                                 Double.class,  false),
+				new ConfigParameter("blipSize",        "Blip Size (Pixels)",                      Integer.class, false),
+				new ConfigParameter("blipColor",       "Blip Color",                              Color.class,   false),
 		};
 	}
 
@@ -46,7 +49,9 @@ public class GPSTrackGaugeFactory implements GaugeFactory {
 	public Gauge getPlugin(Map<String, Object> config) throws Exception {
 		File track               = ConfigParameter.getParameter(config, "track",           File.class,   true);
 		Double opacity           = ConfigParameter.getParameter(config, "opacity",         Double.class, false);
+		Integer blipSize         = ConfigParameter.getParameter(config, "blipSize",        Integer.class,false);
+		Color blipColor          = ConfigParameter.getParameter(config, "blipColor",       Color.class,  false);
 
-		return new GPSTrackGauge(track, opacity);
+		return new GPSTrackGauge(track, opacity, blipSize, blipColor);
 	}
 }

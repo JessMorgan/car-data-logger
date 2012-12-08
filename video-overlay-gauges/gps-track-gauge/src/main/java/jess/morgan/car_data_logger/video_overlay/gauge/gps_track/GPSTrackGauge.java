@@ -38,8 +38,10 @@ public class GPSTrackGauge implements Gauge {
 	private BufferedImage track;
 	private Properties trackProperties;
 	private final float opacity;
+	private final int blipSize;
+	private final Color blipColor;
 
-	public GPSTrackGauge(File track, Double opacity) throws IOException {
+	public GPSTrackGauge(File track, Double opacity, Integer blipSize, Color blipColor) throws IOException {
 		ZipInputStream zis = new ZipInputStream(new FileInputStream(track));
 		try {
 			ZipEntry entry;
@@ -54,7 +56,9 @@ public class GPSTrackGauge implements Gauge {
 		} finally {
 			zis.close();
 		}
-		this.opacity = (opacity == null ? 0.5f : opacity.floatValue());
+		this.opacity   = (opacity   == null ? 0.5f      : opacity.floatValue());
+		this.blipSize  = (blipSize  == null ? 3         : blipSize);
+		this.blipColor = (blipColor == null ? Color.RED : blipColor);
 	}
 
 	@Override
@@ -74,8 +78,6 @@ public class GPSTrackGauge implements Gauge {
 		graphics.drawImage(track, x, y, width, height, null);
 
 		// Display locator
-		graphics.setColor(Color.RED);
-
 		double latitude  = getDoubleParameter(data, "Latitude");
 		double longitude = getDoubleParameter(data, "Longitude");
 
@@ -85,7 +87,11 @@ public class GPSTrackGauge implements Gauge {
 		double bottom = getDoubleParameter(trackProperties, "bottom");
 		int xPos = (int)((longitude - left) / (right - left) *  ((double)width))   + x;
 		int yPos = (int)((latitude - bottom) / (top - bottom) *  ((double)height)) + y;
-		graphics.drawOval(xPos - 1, yPos - 1, 3, 3);
+
+		Color oldColor = graphics.getColor();
+		graphics.setColor(blipColor);
+		graphics.fillOval(xPos - (blipSize - 1) / 2, yPos - (blipSize - 1) / 2, blipSize, blipSize);
+		graphics.setColor(oldColor);
 	}
 
 	private double getDoubleParameter(String value) {

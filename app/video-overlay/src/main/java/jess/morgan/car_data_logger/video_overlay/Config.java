@@ -58,7 +58,7 @@ public class Config {
 		rescaleDataToVideo  = Boolean.parseBoolean(properties.getProperty("video.rescale.data", "false"));
 		imageOutputFormat   = properties.getProperty("video.frames.dest.format", "jpg");
 		threads             = Integer.parseInt(properties.getProperty("threads", "2"));
-		statDisplayFrequency= Integer.parseInt(properties.getProperty("stat.display.frequency", "0"));
+		statDisplayFrequency= Integer.parseInt(properties.getProperty("stat.display.frequency", "10"));
 
 		gauges = new ArrayList<GaugeInfo>();
 		for(int i = 1; ; i++) {

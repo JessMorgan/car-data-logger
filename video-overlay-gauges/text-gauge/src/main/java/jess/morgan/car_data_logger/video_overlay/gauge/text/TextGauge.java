@@ -66,6 +66,10 @@ public class TextGauge implements Gauge {
 		if(str == null || str.trim().isEmpty()) {
 			str = emptyValue;
 		}
+		if(str == null || str.trim().isEmpty()) {
+			// Nothing to display
+			return;
+		}
 
 		TextLayout layout = new TextLayout(str, graphics.getFont(), graphics.getFontRenderContext());
 		Rectangle2D bounds = layout.getPixelBounds(null, x, y);

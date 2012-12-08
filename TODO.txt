@@ -5,6 +5,11 @@
 [ ]   Line number callback for decoder
 [ ] Move jspf from parent to plugin (or create separate module)
 [ ] Remove jspf dependency added to all projects
+[ ] Exception Logging (especially for plugins)
+[ ] Device aliases during capture (add these to the data so they can be separated later, for GPS1, GPS2, etc)
+[ ] Application to re-sync devices
+[ ]   Manually
+[ ]   Auto re-sync GPS to car data based on initial entry with non-zero speed
 
 [ ] Create new data processors:
 [ ]   Accelerometer (convert to Gs)

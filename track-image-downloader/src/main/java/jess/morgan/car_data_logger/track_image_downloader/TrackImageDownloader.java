@@ -58,7 +58,7 @@ public class TrackImageDownloader {
 			// Iterating West to East means going up in value
 			for(BigDecimal x = xMin; x.compareTo(xMax) <= 0; x = x.add(xStep)) {
 				try {
-					downloadImage(getImageDownloadUrl(x, y, zoom), new File("track_" + xCount + "x" + yCount + ".png"));
+					downloadImage(getImageDownloadUrl(x, y, zoom), new File(getFileName(xCount, yCount)));
 				} catch(IOException ioe) {
 					handle403(ioe);
 				}
@@ -87,18 +87,18 @@ public class TrackImageDownloader {
 		int xMid = xCount / 2;
 		int yMid = yCount / 2;
 		BufferedImage image1;
-		BufferedImage image2 = ImageIO.read(new File("track_0x" + yMid + ".png"));
+		BufferedImage image2 = ImageIO.read(new File(getFileName(0, yMid)));
 		for(int x = 0; x < (xCount - 1); x++) {
 			System.out.println("Calculating horizontal offsets: images " + x + " and " + (x + 1) + " of " + xCount);
 			image1 = image2;
-			image2 = ImageIO.read(new File("track_" + (x + 1) + "x" + yMid + ".png"));
+			image2 = ImageIO.read(new File(getFileName(x + 1, yMid)));
 			xOffsets.add(getImageOffset(image1, image2, false));
 		}
-		image2 = ImageIO.read(new File("track_" + xMid + "x0.png"));
+		image2 = ImageIO.read(new File(getFileName(xMid, 0)));
 		for(int y = 0; y < (yCount - 1); y++) {
 			System.out.println("Calculating vertical offsets: images " + y + " and " + (y + 1) + " of " + yCount);
 			image1 = image2;
-			image2 = ImageIO.read(new File("track_" + (xMid) + "x" + (y + 1) + ".png"));
+			image2 = ImageIO.read(new File(getFileName(xMid, y + 1)));
 			yOffsets.add(getImageOffset(image1, image2, true));
 		}
 
@@ -125,6 +125,10 @@ public class TrackImageDownloader {
 		zos.close();
 	}
 
+	private static String getFileName(int x, int y) {
+		return String.format("track_%02dx%02d.png", y, x);
+	}
+
 	private static BufferedImage constructLargeStitchedImage(int xCount, int yCount, double avgXOffset, double avgYOffset) throws IOException {
 		System.out.println("Constructing complete track image");
 		int completeWidth  = IMAGE_WIDTH  + (int)(avgXOffset * (xCount - 1));
@@ -135,7 +139,7 @@ public class TrackImageDownloader {
 		for(int y = 0; y < yCount; y++) {
 			double xPos = 0;
 			for(int x = 0; x < xCount; x++) {
-				BufferedImage smallImage = ImageIO.read(new File("track_" + x + "x" + y + ".png"));
+				BufferedImage smallImage = ImageIO.read(new File(getFileName(x, y)));
 				completeImageGraphics.drawImage(smallImage, (int)xPos, (int)yPos, null);
 				xPos += avgXOffset;
 			}

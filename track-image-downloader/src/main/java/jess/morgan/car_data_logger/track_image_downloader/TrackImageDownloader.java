@@ -52,6 +52,7 @@ public class TrackImageDownloader {
 			BigDecimal yMin, BigDecimal yMax, BigDecimal yStep) throws IOException {
 		int xCount = 0;
 		int yCount = 0;
+		int imagesDownloaded = 0;
 		// Iterating North to South means going down in value
 		for(BigDecimal y = yMax; y.compareTo(yMin) >= 0; y = y.subtract(yStep)) {
 			xCount = 0;
@@ -61,25 +62,33 @@ public class TrackImageDownloader {
 				if(!file.exists()) {
 					try {
 						downloadImage(getImageDownloadUrl(x, y, zoom), file);
+						imagesDownloaded++;
 					} catch(IOException ioe) {
 						handle403(ioe);
 					}
-				}
-				if(xCount % 5 == 4) {
 					try {
-						System.out.println("Completed 5 images - waiting 5 seconds so Google can breathe");
-						Thread.sleep(5000);
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						// Ignore
+					}
+				}
+				if(xCount % 5 == 4 && imagesDownloaded > 0) {
+					try {
+						System.out.println("Completed 5 images - waiting 10 seconds so Google can breathe");
+						Thread.sleep(10000);
 					} catch (InterruptedException e) {
 						// Ignore
 					}
 				}
 				xCount++;
 			}
-			try {
-				System.out.println("Completed a line - waiting 10 seconds so Google can breathe");
-				Thread.sleep(10000);
-			} catch (InterruptedException e) {
-				// Ignore
+			if(imagesDownloaded > 0) {
+				try {
+					System.out.println("Completed a line - waiting 20 seconds so Google can breathe");
+					Thread.sleep(20000);
+				} catch (InterruptedException e) {
+					// Ignore
+				}
 			}
 			yCount++;
 		}
@@ -182,8 +191,8 @@ public class TrackImageDownloader {
 		if(ioe.getMessage() != null && ioe.getMessage().matches(".*\\b403\\b.*")) {
 			// HTTP 403 - Google's telling us to cool it, so wait a minute
 			try {
-				System.err.println("Got a 403 from Google, waiting 60 seconds...");
-				Thread.sleep(60000);
+				System.err.println("Got a 403 from Google, waiting 120 seconds...");
+				Thread.sleep(120000);
 			} catch (InterruptedException e) {
 				// Ignore
 			}

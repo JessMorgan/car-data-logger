@@ -57,10 +57,13 @@ public class TrackImageDownloader {
 			xCount = 0;
 			// Iterating West to East means going up in value
 			for(BigDecimal x = xMin; x.compareTo(xMax) <= 0; x = x.add(xStep)) {
-				try {
-					downloadImage(getImageDownloadUrl(x, y, zoom), new File(getFileName(xCount, yCount)));
-				} catch(IOException ioe) {
-					handle403(ioe);
+				File file = new File(getFileName(xCount, yCount));
+				if(!file.exists()) {
+					try {
+						downloadImage(getImageDownloadUrl(x, y, zoom), file);
+					} catch(IOException ioe) {
+						handle403(ioe);
+					}
 				}
 				if(xCount % 5 == 4) {
 					try {
